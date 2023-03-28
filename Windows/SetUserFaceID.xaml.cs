@@ -40,7 +40,7 @@ namespace AuthFaceIDModernUI.Windows
         {
             InitializeComponent();
 
-            m_faceDetected = new CascadeClassifier("HaarCascadeFrontalface.xml");
+            m_faceDetected = new CascadeClassifier(@"D:\CourseWork\FaceID\haarcascade_frontalface_default.xml");
             m_faceRecognizer = new EigenFaceRecognizer();
 
             m_camera = new();

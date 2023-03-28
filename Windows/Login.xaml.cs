@@ -43,7 +43,9 @@ namespace ModernLoginWindow
 
         private void FaceIDButton_Click(object sender, RoutedEventArgs e)
         {
-
+            SetUserFaceID setUserFaceID = new();
+            setUserFaceID.Show();
+            Close();
         }
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
