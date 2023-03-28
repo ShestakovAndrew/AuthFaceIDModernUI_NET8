@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:AuthFaceIDModernUI.Windows"
         mc:Ignorable="d"
-        Title="SetUserFaceID" Height="800" Width="800"
+        Title="SetUserFaceID" Height="600" Width="700"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{x:Null}"
         AllowsTransparency="True"
@@ -24,7 +24,7 @@
             x:Name="DialogHost"
         >
             <StackPanel>
-                <Image x:Name="CameraImages" Height="600" Width="600" Margin="0 30 0 0"/>
+                <Image x:Name="CameraImages" Height="400" Width="600" Margin="0 30 0 0"/>
                 <StackPanel 
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
@@ -35,41 +35,21 @@
                     Style="{StaticResource MaterialDesignFlatButton}"
                     materialDesign:ElevationAssist.Elevation="Dp0"
                     Height="53"
-                    Width="170"
+                    Width="200"
                     materialDesign:ButtonAssist.CornerRadius="10"
                     FontSize="18" 
                     Foreground="Red" Background="White"
-                    Margin="0 0 10 0" Click="BackButton_Click"
-                />
-                    <Button Content="Сделать снимок"
-                    x:Name="DoFaceImageButton"
-                    Style="{StaticResource MaterialDesignFlatMidBgButton}"
-                    materialDesign:ElevationAssist.Elevation="Dp0"
-                    Height="53"
-                    Width="170"
-                    materialDesign:ButtonAssist.CornerRadius="10"
-                    FontSize="18"
-                    Margin="0 0 10 0" Click="DoFaceImageButton_Click"
-                />
-                    <Button Content="Переснять"
-                    x:Name="ReDoFaceImageButton"
-                    Style="{StaticResource MaterialDesignFlatMidBgButton}"
-                    materialDesign:ElevationAssist.Elevation="Dp0"
-                    Height="53"
-                    Width="170"
-                    materialDesign:ButtonAssist.CornerRadius="10"
-                    FontSize="18"
-                    Margin="0 0 10 0" Click="ReDoFaceImageButton_Click"
+                    Margin="0 0 100 0" Click="BackButton_Click"
                 />
                     <Button Content="Сохранить"
                     x:Name="SaveFaceImageButton"
                     Style="{StaticResource MaterialDesignFlatMidBgButton}"
                     materialDesign:ElevationAssist.Elevation="Dp0"
                     Height="53"
-                    Width="170"
+                    Width="200"
                     materialDesign:ButtonAssist.CornerRadius="10"
                     FontSize="18"
-                    Margin="0 0 10 0" Click="SaveFaceImageButton_Click"
+                    Margin="0 0 10 0" Click="SaveFaceImageButton_Click" Cursor="Hand"
                 />
                 </StackPanel>
             </StackPanel>
