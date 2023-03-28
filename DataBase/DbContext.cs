@@ -1,15 +1,7 @@
 ﻿using AuthFaceIDModernUI.Secure;
-using Emgu.CV.Features2D;
+using Emgu.CV;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using ModernLoginWindow;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace AuthFaceIDModernUI.DataBase
 {
@@ -59,6 +51,14 @@ namespace AuthFaceIDModernUI.DataBase
         {
             var userToChange = Users.Where(u => u.Login == userLogin).First();
             userToChange.Password = PasswordHasher.Hash(password);
+            SaveChanges();
+            return true;
+        }
+
+        public bool SaveFaceByLogin(Mat userFace, string userLogin)
+        {
+            var userToChange = Users.Where(u => u.Login == userLogin).First();
+            userToChange.Face = userFace;
             SaveChanges();
             return true;
         }
