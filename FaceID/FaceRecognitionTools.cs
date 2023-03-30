@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AuthFaceIDModernUI.FaceID
 {
-    internal class FaceRecognitionTools
+    internal static class FaceRecognitionTools
     {
-        internal static bool FaceExistByLogin(string text)
+        internal static bool FaceExistByLogin(string userLogin)
         {
             throw new NotImplementedException();
         }
