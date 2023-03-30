@@ -18,14 +18,17 @@ namespace AuthFaceIDModernUI.Windows
 {
     public partial class ChangePassword : Window
     {
+        private string m_userLogin { get; set; }
+
+        private UsersDataBase m_dataBase { get; set; }
+
         public ChangePassword(string userLogin)
         {
             InitializeComponent();
 
-            UserLogin = userLogin;
+            m_userLogin = userLogin;
+            m_dataBase = new UsersDataBase();
         }
-
-        private string UserLogin { get; set; }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
@@ -35,15 +38,13 @@ namespace AuthFaceIDModernUI.Windows
 
         private void OpenNewPersonalAreaWindow()
         {
-            PersonalArea personalArea = new(UserLogin);
+            PersonalArea personalArea = new(m_userLogin);
             personalArea.Show();
             Close();
         }
 
         private void ChangePasswordButton_Click(object sender, RoutedEventArgs e)
         {
-            using var db = new UsersContext();
-
             if (OldPasswordBox.Password.Length == 0)
             {
                 OldPasswordBox.BorderBrush = new SolidColorBrush(Colors.Red);
@@ -69,17 +70,15 @@ namespace AuthFaceIDModernUI.Windows
                 return;
             }
 
-            if (!db.IsPasswordCorrectForUser(UserLogin, OldPasswordBox.Password))
+            if (!m_dataBase.IsPasswordCorrectForUser(m_userLogin, OldPasswordBox.Password))
             {
                 OldPasswordBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 return;
             }
-            else
+
+            if (m_dataBase.ChangeUserPassword(m_userLogin, NewPasswordBox.Password))
             {
-                if (db.ChangeUserPassword(UserLogin, NewPasswordBox.Password))
-                {
-                    OpenNewPersonalAreaWindow();
-                };
+                OpenNewPersonalAreaWindow();
             }
         }
 

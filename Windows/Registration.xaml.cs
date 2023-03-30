@@ -18,9 +18,13 @@ namespace AuthFaceIDModernUI.Windows
 {
     public partial class Registration : Window
     {
+        private UsersDataBase m_dataBase { get; set; }
+
         public Registration()
         {
             InitializeComponent();
+
+            m_dataBase = new UsersDataBase();
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -63,20 +67,16 @@ namespace AuthFaceIDModernUI.Windows
                 return;
             }
 
-            using var db = new UsersContext();
-
-            if (db.IsLoginExistInDB(NewLoginTextBox.Text))
+            if (m_dataBase.IsLoginExistInDB(NewLoginTextBox.Text))
             {
                 NewLoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 return;
             }
-            else
+
+            if (m_dataBase.AddNewUser(NewLoginTextBox.Text, NewPasswordBox.Password))
             {
-                if (db.AddNewUser(NewLoginTextBox.Text, NewPasswordBox.Password))
-                {
-                    OpenNewLoginWindow();
-                };
-            }
+                OpenNewLoginWindow();
+            };
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

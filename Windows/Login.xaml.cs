@@ -3,15 +3,20 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using AuthFaceIDModernUI.DataBase;
+using AuthFaceIDModernUI.FaceID;
 using AuthFaceIDModernUI.Windows;
 
 namespace ModernLoginWindow
 {
     public partial class Login : Window
     {
+        private UsersDataBase m_dataBase { get; set; }
+
         public Login()
         {
             InitializeComponent();
+
+            m_dataBase = new UsersDataBase();
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -20,32 +25,45 @@ namespace ModernLoginWindow
             DragMove();
         }
 
+        private void LoginToPersonalArea(string login)
+        {
+            PersonalArea personalArea = new(login);
+            personalArea.Show();
+            Close();
+        }
+
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            using var db = new UsersContext();
-
-            if (!db.IsLoginExistInDB(LoginTextBox.Text))
+            if (!m_dataBase.IsLoginExistInDB(LoginTextBox.Text))
             {
                 LoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 return;
             }
 
-            if (!db.IsPasswordCorrectForUser(LoginTextBox.Text, PasswordBox.Password))
+            if (!m_dataBase.IsPasswordCorrectForUser(LoginTextBox.Text, PasswordBox.Password))
             {
                 PasswordBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 return;
             }
 
-            PersonalArea personalArea = new(LoginTextBox.Text);
-            personalArea.Show();
-            Close();
+            LoginToPersonalArea(LoginTextBox.Text);
         }
 
         private void FaceIDButton_Click(object sender, RoutedEventArgs e)
         {
-            SetUserFaceID setUserFaceID = new();
-            setUserFaceID.Show();
-            Close();
+            if (!m_dataBase.IsLoginExistInDB(LoginTextBox.Text))
+            {
+                LoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                return;
+            }
+
+            if (!FaceRecognitionTools.FaceExistByLogin(LoginTextBox.Text))
+            {
+                PasswordBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                return;
+            }
+
+            LoginToPersonalArea(LoginTextBox.Text);
         }
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)

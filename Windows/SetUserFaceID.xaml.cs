@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.CV.Face;
+using AuthFaceIDModernUI.DataBase;
 
 namespace AuthFaceIDModernUI.Windows
 {
@@ -12,15 +12,15 @@ namespace AuthFaceIDModernUI.Windows
     {
         private CascadeClassifier m_faceDetected;
 
-        private EigenFaceRecognizer m_faceRecognizer;
-
         private VideoCapture? m_capture;
 
-        private Mat m_grayFrame;
+        private string m_userLogin;
 
-        private Mat m_frame;
+        private Mat? m_userFace;
 
-        public SetUserFaceID()
+        private UsersDataBase m_dataBase { get; set; }
+
+        public SetUserFaceID(string userLogin)
         {
             InitializeComponent();
 
@@ -30,15 +30,14 @@ namespace AuthFaceIDModernUI.Windows
                 m_capture.ImageGrabbed += ProcessFrame;
                 m_capture.Start();
             }
-            catch(NullReferenceException excpt)
+            catch (NullReferenceException excpt)
             {
                 MessageBox.Show(excpt.Message);
             }
 
             m_faceDetected = new CascadeClassifier(@"D:\CourseWork\FaceID\haarcascade_frontalface_default.xml");
-            m_faceRecognizer = new EigenFaceRecognizer();
-            m_grayFrame = new Mat();
-            m_frame = new Mat();
+            m_dataBase = new UsersDataBase();
+            m_userLogin = userLogin;
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -46,49 +45,86 @@ namespace AuthFaceIDModernUI.Windows
             base.OnMouseLeftButtonDown(e);
             DragMove();
         }
+        
+        private Mat GetCurrentFrame()
+        {
+            Mat? newFrame = new();
 
+            if (m_capture != null && m_capture.Ptr != IntPtr.Zero)
+            {
+                m_capture.Retrieve(newFrame, 0);
+            }
+
+            return newFrame;
+        }
+        
         private void ProcessFrame(object sender, EventArgs e)
         {
             if (m_capture != null && m_capture.Ptr != IntPtr.Zero)
             {
-                m_capture.Retrieve(m_frame, 0);
-                CvInvoke.CvtColor(m_frame, m_grayFrame, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
+                Mat? currentFrame = GetCurrentFrame();
 
-                var faces = m_faceDetected.DetectMultiScale(m_grayFrame);
-
-                foreach (var face in faces)
+                if (currentFrame != null) 
                 {
-                    var faceImage = new Mat(m_grayFrame, face);
+                    var faceOnFrame = m_faceDetected.DetectMultiScale(currentFrame).FirstOrDefault();
 
-                    CvInvoke.Resize(faceImage, faceImage, new System.Drawing.Size(100, 100));
-                    CvInvoke.Rectangle(m_frame, face, new MCvScalar(0, 0, 255));
-
-                    /*
-                    var prediction = m_faceRecognizer.Predict(faceImage);
-
-                    if (prediction.Label != -1)
+                    if (!faceOnFrame.IsEmpty) 
                     {
-                        var name = "name";
-                        CvInvoke.PutText(m_frame, name, new System.Drawing.Point(face.X, face.Y - 10), Emgu.CV.CvEnum.FontFace.HersheyPlain, 1.0, new MCvScalar(0, 0, 255));
-                    }
-                    */
-                }
+                        var faceImage = new Mat(currentFrame, faceOnFrame);
+                        CvInvoke.Resize(faceImage, faceImage, new System.Drawing.Size(150, 150));
 
-                Dispatcher.Invoke(
-                    DispatcherPriority.Normal,
-                    new Action(() => CameraImages.Source = BitmapSourceExtension.ToBitmapSource(m_frame))
-                );
+                        CvInvoke.Rectangle(currentFrame, faceOnFrame, new Bgr(System.Drawing.Color.DarkGreen).MCvScalar);
+                        CvInvoke.PutText(
+                            currentFrame,
+                            m_userLogin,
+                            new System.Drawing.Point(faceOnFrame.X, faceOnFrame.Y - 10),
+                            Emgu.CV.CvEnum.FontFace.HersheyComplex,
+                            1.0,
+                            new Bgr(System.Drawing.Color.DarkGreen).MCvScalar
+                        );
+
+                        m_userFace = faceImage;
+                    }
+
+                    Dispatcher.Invoke(
+                        DispatcherPriority.Normal,
+                        new Action(() => CameraImages.Source = BitmapSourceExtension.ToBitmapSource(currentFrame))
+                    );
+                }
             }
         }
 
         private void SaveFaceImageButton_Click(object sender, RoutedEventArgs e)
         {
+            if (m_userFace != null) 
+            {
+                SaveUserFace();
+                OpenPersonalArea();
+            }
+            else
+            {
+                MessageBox.Show("Убедитесь, чтобы ваше лицо было определено и находилось в рамке.");
+            }
+        }
 
+        private void SaveUserFace()
+        {
+            if (m_dataBase.SaveFaceByLogin(m_userFace!, m_userLogin))
+            {
+
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            OpenPersonalArea();
+        }
 
+        private void OpenPersonalArea()
+        {
+            PersonalArea personalArea = new(m_userLogin);
+            personalArea.Show();
+            Close();
         }
     }
 }

@@ -1,40 +1,25 @@
 ﻿using ModernLoginWindow;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace AuthFaceIDModernUI.Windows
 {
-    /// <summary>
-    /// Логика взаимодействия для PersonalArea.xaml
-    /// </summary>
     public partial class PersonalArea : Window
     {
+        private string m_userLogin { get; set; }
+
+        private bool m_isFaceIDEnable { get; set; }
 
         public PersonalArea(string userLogin)
         {
             InitializeComponent();
 
-            UserLogin = userLogin;
-            TitleTextBlock.Text += UserLogin;
-            IsFaceIDEnable = false;
+            m_userLogin = userLogin;
+            TitleTextBlock.Text += m_userLogin;
+            m_isFaceIDEnable = false;
 
             UpdateFaceIDSettings();
         }
-
-        private string UserLogin { get; set; }
-
-        private bool IsFaceIDEnable { get; set; }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
@@ -44,7 +29,7 @@ namespace AuthFaceIDModernUI.Windows
 
         private void FaceIDToggleButton_Click(object sender, RoutedEventArgs e)
         {
-            IsFaceIDEnable = !IsFaceIDEnable;
+            m_isFaceIDEnable = !m_isFaceIDEnable;
 
             UpdateFaceIDSettings();
         }
@@ -61,13 +46,13 @@ namespace AuthFaceIDModernUI.Windows
 
         private void UpdateFaceIDSettings()
         {
-            ChangeFaceIDButton.IsEnabled = IsFaceIDEnable;
-            DeleteFaceIDButton.IsEnabled = IsFaceIDEnable;
+            ChangeFaceIDButton.IsEnabled = m_isFaceIDEnable;
+            DeleteFaceIDButton.IsEnabled = m_isFaceIDEnable;
         }
 
         private void ChangePasswordButton_Click(object sender, RoutedEventArgs e)
         {
-            ChangePassword changePassword = new(UserLogin);
+            ChangePassword changePassword = new(m_userLogin);
             changePassword.Show();
             Close();
         }
