@@ -22,7 +22,14 @@ namespace AuthFaceIDModernUI.DataBase
 
         public bool IsLoginExistInDB(string userLogin)
         {
-            return usersContext.Users.Any(u => u.Login == userLogin);
+            try
+            {
+                return usersContext.Users.Any(u => u.Login == userLogin);
+            }
+            catch 
+            { 
+                return false; 
+            }
         }
 
         public bool AddNewUser(string login, string password)

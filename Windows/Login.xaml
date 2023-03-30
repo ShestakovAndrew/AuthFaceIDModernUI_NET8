@@ -59,7 +59,7 @@
                     Width="300"
                     FontSize="18"
                     BorderThickness="2"
-                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+                    BorderBrush="Gray"
                     Style="{StaticResource MaterialDesignOutlinedTextBox}" TextChanged="LoginTextBox_TextChanged"
                 />
                 <PasswordBox x:Name="PasswordBox"
@@ -68,7 +68,7 @@
                     Width="300"
                     FontSize="18"
                     BorderThickness="2"
-                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+                    BorderBrush="Gray"
                     Style="{StaticResource MaterialDesignOutlinedPasswordBox}" PasswordChanged="PasswordBox_PasswordChanged"
                 />
 
@@ -82,7 +82,7 @@
                         Height="50"
                         Width="50"
                         materialDesign:ButtonAssist.CornerRadius="10"
-                        Margin="0 0 10 0" Cursor="Hand" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="FaceIDButton_Click"
+                        Margin="0 0 10 0" Cursor="Hand" BorderBrush="Black" Foreground="{x:Null}" Click="FaceIDButton_Click"
                         >
                         <Button.Background>
                             <ImageBrush ImageSource="../Images/face-id.png"/>

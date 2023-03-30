@@ -51,15 +51,17 @@ namespace ModernLoginWindow
 
         private void FaceIDButton_Click(object sender, RoutedEventArgs e)
         {
+            FaceIDButton.BorderBrush = new SolidColorBrush(Colors.Red);
+
             if (!m_dataBase.IsLoginExistInDB(LoginTextBox.Text))
             {
                 LoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 return;
             }
-
+            
             if (!FaceRecognitionTools.FaceExistByLogin(LoginTextBox.Text))
             {
-                PasswordBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                FaceIDButton.BorderBrush = new SolidColorBrush(Colors.Red);
                 return;
             }
 
@@ -81,6 +83,7 @@ namespace ModernLoginWindow
         private void LoginTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             LoginTextBox.BorderBrush = new SolidColorBrush(Colors.Gray);
+            FaceIDButton.BorderBrush = new SolidColorBrush(Colors.Black);
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
