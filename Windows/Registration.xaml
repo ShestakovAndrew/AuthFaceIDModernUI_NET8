@@ -67,7 +67,8 @@
                     Height="53"
                     Width="300"
                     materialDesign:ButtonAssist.CornerRadius="10"
-                    FontSize="18" 
+                    FontSize="18"
+                    IsDefault="True"
                     Click="CreateAccountButton_Click"
                 />
                 <Button Content="Назад"

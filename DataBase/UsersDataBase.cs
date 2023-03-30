@@ -65,6 +65,21 @@ namespace AuthFaceIDModernUI.DataBase
             return false;
         }
 
+        public bool DeleteFaceIDByLogin(string userLogin)
+        {
+            User? userFromDB = GetUserFromDBByLogin(userLogin);
+
+            if (userFromDB != null)
+            {
+                userFromDB.isExistFaceID = false;
+                userFromDB.faceID = null;
+                usersContext.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
         public bool SaveFaceByLogin(Mat userFace, string userLogin)
         {
             User? userToChange = GetUserFromDBByLogin(userLogin);
@@ -75,6 +90,18 @@ namespace AuthFaceIDModernUI.DataBase
                 userToChange.isExistFaceID = true;
                 usersContext.SaveChanges();
                 return true;
+            }
+
+            return false;
+        }
+
+        public bool IsExistFaceIDByLogin(string userLogin)
+        {
+            User? userFromDB = GetUserFromDBByLogin(userLogin);
+
+            if (userFromDB != null)
+            {
+                return userFromDB.isExistFaceID;
             }
 
             return false;

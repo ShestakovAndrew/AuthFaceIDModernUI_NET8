@@ -40,7 +40,8 @@
                         FontSize="24" 
                         Opacity="0.995"
                         Cursor="Hand"
-                        IsChecked="{Binding IsFaceIDEnable}" Click="FaceIDToggleButton_Click"
+                        Checked="FaceIDToggleButton_Checked" 
+                        Unchecked="FaceIDToggleButton_Unchecked"
                     />
 
                 </StackPanel>

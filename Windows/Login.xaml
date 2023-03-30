@@ -33,6 +33,7 @@
                         <Button x:Name="ExitButton"
                             ToolTip="Закрыть приложение" 
                             Content="Выход"
+                            IsCancel="True"
                             Margin="0 8 0 0"
                             Click="ExitButton_Click"/>
                     </StackPanel>
@@ -95,6 +96,7 @@
                         materialDesign:ElevationAssist.Elevation="Dp0"
                         Height="53"
                         Width="240"
+                        IsDefault="True"
                         materialDesign:ButtonAssist.CornerRadius="10"
                         FontSize="18" Click="LoginButton_Click"
                 />

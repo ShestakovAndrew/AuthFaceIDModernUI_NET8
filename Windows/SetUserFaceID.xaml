@@ -37,6 +37,7 @@
                     x:Name="BackButton"
                     Style="{StaticResource MaterialDesignFlatButton}"
                     materialDesign:ElevationAssist.Elevation="Dp0"
+                    IsCancel="True"
                     Height="53"
                     Width="200"
                     materialDesign:ButtonAssist.CornerRadius="10"

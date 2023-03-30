@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using AuthFaceIDModernUI.DataBase;
+using System.Text.RegularExpressions;
 
 namespace AuthFaceIDModernUI.Windows
 {
@@ -17,8 +18,6 @@ namespace AuthFaceIDModernUI.Windows
         private string m_userLogin;
 
         private Mat? m_userFace;
-
-        private UsersDataBase m_dataBase { get; set; }
 
         public SetUserFaceID(string userLogin)
         {
@@ -36,7 +35,6 @@ namespace AuthFaceIDModernUI.Windows
             }
 
             m_faceDetected = new CascadeClassifier(@"D:\CourseWork\FaceID\haarcascade_frontalface_default.xml");
-            m_dataBase = new UsersDataBase();
             m_userLogin = userLogin;
         }
 
@@ -98,8 +96,9 @@ namespace AuthFaceIDModernUI.Windows
         {
             if (m_userFace != null) 
             {
-                SaveUserFace();
-                OpenPersonalArea();
+                UsersDataBase db = new();
+                db.SaveFaceByLogin(m_userFace!, m_userLogin);
+                Close();
             }
             else
             {
@@ -107,23 +106,8 @@ namespace AuthFaceIDModernUI.Windows
             }
         }
 
-        private void SaveUserFace()
-        {
-            if (m_dataBase.SaveFaceByLogin(m_userFace!, m_userLogin))
-            {
-
-            }
-        }
-
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenPersonalArea();
-        }
-
-        private void OpenPersonalArea()
-        {
-            PersonalArea personalArea = new(m_userLogin);
-            personalArea.Show();
             Close();
         }
     }
