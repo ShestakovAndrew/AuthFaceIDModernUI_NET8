@@ -1,11 +1,11 @@
 ﻿using System.Windows;
+using System.Drawing;
 using System.Windows.Threading;
 using System.Windows.Input;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
 using AuthFaceIDModernUI.DataBase;
-using System.Text.RegularExpressions;
 
 namespace AuthFaceIDModernUI.Windows
 {
@@ -23,10 +23,12 @@ namespace AuthFaceIDModernUI.Windows
         {
             InitializeComponent();
 
+            CvInvoke.UseOpenCL = false;
+
             try
             {
                 m_capture = new VideoCapture();
-                m_capture.ImageGrabbed += ProcessFrame;
+                m_capture.ImageGrabbed += ProcessFrame!;
                 m_capture.Start();
             }
             catch (NullReferenceException excpt)
@@ -64,31 +66,35 @@ namespace AuthFaceIDModernUI.Windows
 
                 if (currentFrame != null) 
                 {
-                    var faceOnFrame = m_faceDetected.DetectMultiScale(currentFrame).FirstOrDefault();
+                    Rectangle faceOnFrame = m_faceDetected.DetectMultiScale(currentFrame).FirstOrDefault();
 
                     if (!faceOnFrame.IsEmpty) 
                     {
-                        var faceImage = new Mat(currentFrame, faceOnFrame);
-                        CvInvoke.Resize(faceImage, faceImage, new System.Drawing.Size(150, 150));
+                        Mat faceImage = new Mat(currentFrame, faceOnFrame);
 
-                        CvInvoke.Rectangle(currentFrame, faceOnFrame, new Bgr(System.Drawing.Color.DarkGreen).MCvScalar);
+                        CvInvoke.Resize(faceImage, faceImage, new System.Drawing.Size(150, 150));
+                        CvInvoke.Rectangle(currentFrame, faceOnFrame, new Bgr(Color.DarkGreen).MCvScalar);
                         CvInvoke.PutText(
                             currentFrame,
                             m_userLogin,
                             new System.Drawing.Point(faceOnFrame.X, faceOnFrame.Y - 10),
                             Emgu.CV.CvEnum.FontFace.HersheyComplex,
                             1.0,
-                            new Bgr(System.Drawing.Color.DarkGreen).MCvScalar
+                            new Bgr(Color.DarkGreen).MCvScalar
                         );
 
                         m_userFace = faceImage;
                     }
+                    else
+                    {
+                        m_userFace = null;
+                    }
+                }
 
-                    Dispatcher.Invoke(
+                Dispatcher.BeginInvoke(
                         DispatcherPriority.Normal,
                         new Action(() => CameraImages.Source = BitmapSourceExtension.ToBitmapSource(currentFrame))
                     );
-                }
             }
         }
 
@@ -98,7 +104,7 @@ namespace AuthFaceIDModernUI.Windows
             {
                 UsersDataBase db = new();
                 db.SaveFaceByLogin(m_userFace!, m_userLogin);
-                Close();
+                SaveClose();
             }
             else
             {
@@ -108,6 +114,13 @@ namespace AuthFaceIDModernUI.Windows
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            SaveClose();
+        }
+
+        private void SaveClose()
+        {
+            m_capture?.Stop();
+            m_capture?.Dispose();
             Close();
         }
     }
