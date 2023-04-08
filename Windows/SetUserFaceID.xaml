@@ -24,6 +24,7 @@
             x:Name="DialogHost"
         >
             <StackPanel>
+
                 <Image x:Name="CameraImages" 
                        Height="400" 
                        Width="600"
@@ -45,7 +46,7 @@
                     Foreground="Red" Background="White"
                     Margin="0 0 100 0" Click="BackButton_Click"
                 />
-                    <Button Content="Сохранить"
+                    <Button Content="Записать 5 секунд"
                     x:Name="SaveFaceImageButton"
                     Style="{StaticResource MaterialDesignFlatMidBgButton}"
                     materialDesign:ElevationAssist.Elevation="Dp0"
