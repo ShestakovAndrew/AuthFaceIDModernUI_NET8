@@ -86,7 +86,7 @@ namespace AuthFaceIDModernUI.DataBase
 
             if (userToChange != null) 
             {
-                userToChange.facesPath = System.IO.Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), userLogin.ToString());
+                userToChange.facesPath = System.IO.Path.Join(Config.UserPhotosPath, userLogin.ToString());
                 userToChange.isExistFaceID = true;
                 usersContext.SaveChanges();
                 return true;

@@ -8,21 +8,21 @@ namespace AuthFaceIDModernUI.Windows
 {
     public partial class SetUserFaceID : Window
     {
-        private int m_countFacesToLearn = 200;
-
         private FaceCamera m_faceCamera;
         private string m_userLogin;
+        private bool m_isFacesToChange;
 
-        public SetUserFaceID(string userLogin)
+        public SetUserFaceID(string userLogin, bool isFacesToChange)
         {
             InitializeComponent();
 
             m_userLogin = userLogin;
+            m_isFacesToChange = isFacesToChange;
+
             m_faceCamera = new FaceCamera(
                 CameraImages, 
                 StartGetFacesButton,
-                FaceProgressBar,
-                m_countFacesToLearn
+                FaceProgressBar
             );
 
             m_faceCamera.TurnOn();
@@ -38,7 +38,7 @@ namespace AuthFaceIDModernUI.Windows
         {
             if (StartGetFacesButton.Content.ToString() == "Сохранить")
             {
-                UsersDataBase db = new UsersDataBase();
+                UsersDataBase db = new();
                 
                 if (db.IsExistFaceIDByLogin(m_userLogin))
                 {
@@ -46,10 +46,9 @@ namespace AuthFaceIDModernUI.Windows
                     db.DeleteFacesByLogin(m_userLogin);
                 }
 
-                db.SaveFacesByLogin(m_userLogin);
                 SaveFacesTools.SaveFacesByLogin(m_userLogin, m_faceCamera.m_userFaces);
-                UsersDataBase usersDataBase = new UsersDataBase();
-                usersDataBase.SaveFacesByLogin(m_userLogin);
+                db.SaveFacesByLogin(m_userLogin);
+
                 m_faceCamera.TurnOff();
                 Close();
             }
@@ -64,7 +63,12 @@ namespace AuthFaceIDModernUI.Windows
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             m_faceCamera.TurnOff();
-            SaveFacesTools.DeleteFacesByLogin(m_userLogin);
+
+            if (!m_isFacesToChange)
+            {
+                SaveFacesTools.DeleteFacesByLogin(m_userLogin);
+            }
+
             Close();
         }
     }

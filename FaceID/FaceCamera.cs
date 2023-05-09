@@ -8,30 +8,32 @@ namespace AuthFaceIDModernUI.FaceID
 {
     public class FaceCamera
     {
-        private CascadeClassifier m_faceDetected;
+        private CascadeClassifier m_faceClassifier;
         private VideoCapture? m_capture;
-        private System.Windows.Controls.Image m_imageControl;
 
         private bool m_isStartSaveFaces;
         private int m_countFacesToLearn;
+
+        public List<Mat> m_userFaces { get; set; }
+
         private System.Windows.Controls.Button m_buttonControl;
         private System.Windows.Controls.ProgressBar m_progressBarControl;
-        public List<Mat> m_userFaces { get; set; }
+        private System.Windows.Controls.Image m_faceViewControl;
 
         public FaceCamera(
             System.Windows.Controls.Image imageControl, 
-            System.Windows.Controls.Button startGetFacesButton,
-            System.Windows.Controls.ProgressBar progressBarControl,
-            int countFacesToLearn
+            System.Windows.Controls.Button buttonControl,
+            System.Windows.Controls.ProgressBar progressBarControl
         )
         {
-            m_imageControl = imageControl;
-            m_buttonControl = startGetFacesButton;
-            m_countFacesToLearn = countFacesToLearn;
+            m_faceViewControl = imageControl;
+            m_buttonControl = buttonControl;
             m_progressBarControl = progressBarControl;
+
+            m_countFacesToLearn = Config.CountFacesToLearn;
             m_isStartSaveFaces = false;
 
-            m_faceDetected = new CascadeClassifier(@"D:\CourseWork\FaceID\haarcascade_frontalface_default.xml");
+            m_faceClassifier = new CascadeClassifier(Config.HaarCascadePath);
             m_userFaces = new List<Mat>();
         }
 
@@ -83,7 +85,7 @@ namespace AuthFaceIDModernUI.FaceID
 
                 if (currentFrame != null)
                 {
-                    Rectangle faceOnFrame = m_faceDetected.DetectMultiScale(currentFrame).FirstOrDefault();
+                    Rectangle faceOnFrame = m_faceClassifier.DetectMultiScale(currentFrame).FirstOrDefault();
 
                     if (!faceOnFrame.IsEmpty)
                     {
@@ -129,9 +131,9 @@ namespace AuthFaceIDModernUI.FaceID
                     }
                 }
 
-                m_imageControl.Dispatcher.Invoke(() =>
+                m_faceViewControl.Dispatcher.Invoke(() =>
                 {
-                    m_imageControl.Source = BitmapSourceExtension.ToBitmapSource(currentFrame);
+                    m_faceViewControl.Source = BitmapSourceExtension.ToBitmapSource(currentFrame);
                 });
             }
         }

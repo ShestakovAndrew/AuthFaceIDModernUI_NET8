@@ -20,17 +20,7 @@ namespace AuthFaceIDModernUI.Windows
             m_userLogin = userLogin;
             TitleTextBlock.Text += userLogin;
 
-            UsersDataBase db = new();
-            FaceIDToggleButton.IsChecked = db.IsExistFaceIDByLogin(m_userLogin);
-
-            if (FaceIDToggleButton.IsChecked.Value)
-            {
-                FaceIDButtonsEnable();
-            }
-            else
-            {
-                FaceIDButtonsDisable();
-            }
+            SetFaceIDToggleButton();
 
             m_isWindowLoading = false;
         }
@@ -43,7 +33,7 @@ namespace AuthFaceIDModernUI.Windows
 
         private void ChangeFaceIDButton_Click(object sender, RoutedEventArgs e)
         {
-            SetUserFaceID userFaceID = new(m_userLogin);
+            SetUserFaceID userFaceID = new(m_userLogin, true);
             userFaceID.ShowDialog();
         }
 
@@ -70,10 +60,15 @@ namespace AuthFaceIDModernUI.Windows
         {
             if (!m_isWindowLoading)
             {
-                SetUserFaceID userFaceID = new SetUserFaceID(m_userLogin);
+                SetUserFaceID userFaceID = new SetUserFaceID(m_userLogin, false);
                 userFaceID.ShowDialog();
             }
 
+            SetFaceIDToggleButton();
+        }
+
+        private void SetFaceIDToggleButton()
+        {
             UsersDataBase db = new();
             if (db.IsExistFaceIDByLogin(m_userLogin))
             {
@@ -81,7 +76,7 @@ namespace AuthFaceIDModernUI.Windows
             }
             else
             {
-                FaceIDToggleButton.IsChecked = false;
+                FaceIDButtonsDisable();
             }
         }
 
@@ -107,6 +102,7 @@ namespace AuthFaceIDModernUI.Windows
 
         private void FaceIDButtonsEnable()
         {
+            FaceIDToggleButton.IsChecked = true;
             ChangeFaceIDButton.IsEnabled = true;
             DeleteFaceIDButton.IsEnabled = true;
         }

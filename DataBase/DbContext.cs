@@ -12,9 +12,7 @@ namespace AuthFaceIDModernUI.DataBase
 
         public UsersContext()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = System.IO.Path.Join(path, "users.db");
+            DbPath = Config.DataBasePath;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
