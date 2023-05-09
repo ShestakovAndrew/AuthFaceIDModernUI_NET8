@@ -8,7 +8,6 @@ namespace AuthFaceIDModernUI.DataBase
     public class UsersContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-
         public string DbPath { get; }
 
         public UsersContext()

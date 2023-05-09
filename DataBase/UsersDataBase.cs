@@ -65,14 +65,14 @@ namespace AuthFaceIDModernUI.DataBase
             return false;
         }
 
-        public bool DeleteFaceIDByLogin(string userLogin)
+        public bool DeleteFacesByLogin(string userLogin)
         {
             User? userFromDB = GetUserFromDBByLogin(userLogin);
 
             if (userFromDB != null)
             {
                 userFromDB.isExistFaceID = false;
-                userFromDB.faceID = null;
+                userFromDB.facesPath = null;
                 usersContext.SaveChanges();
                 return true;
             }
@@ -80,13 +80,13 @@ namespace AuthFaceIDModernUI.DataBase
             return false;
         }
 
-        public bool SaveFaceByLogin(Mat userFace, string userLogin)
+        public bool SaveFacesByLogin(string userLogin)
         {
             User? userToChange = GetUserFromDBByLogin(userLogin);
 
             if (userToChange != null) 
             {
-                userToChange.faceID = userFace.ToImage<Bgr, byte>().ToJpegData();
+                userToChange.facesPath = System.IO.Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), userLogin.ToString());
                 userToChange.isExistFaceID = true;
                 usersContext.SaveChanges();
                 return true;
@@ -104,7 +104,7 @@ namespace AuthFaceIDModernUI.DataBase
                 return userFromDB.isExistFaceID;
             }
 
-            return false;
+            throw new Exception("Пользователь не найден");
         }
 
         private User? GetUserFromDBByLogin(string userLogin)
