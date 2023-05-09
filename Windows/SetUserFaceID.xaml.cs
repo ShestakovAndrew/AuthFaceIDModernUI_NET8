@@ -42,11 +42,11 @@ namespace AuthFaceIDModernUI.Windows
                 
                 if (db.IsExistFaceIDByLogin(m_userLogin))
                 {
-                    SaveFacesTools.DeleteFacesByLogin(m_userLogin);
+                    FacesRecognizerTool.DeleteRecognizerByLogin(m_userLogin);
                     db.DeleteFacesByLogin(m_userLogin);
                 }
 
-                SaveFacesTools.SaveFacesByLogin(m_userLogin, m_faceCamera.m_userFaces);
+                FacesRecognizerTool.SaveRecognizerByLogin(m_userLogin, m_faceCamera.m_userFaces);
                 db.SaveFacesByLogin(m_userLogin);
 
                 m_faceCamera.TurnOff();
@@ -66,7 +66,7 @@ namespace AuthFaceIDModernUI.Windows
 
             if (!m_isFacesToChange)
             {
-                SaveFacesTools.DeleteFacesByLogin(m_userLogin);
+                FacesRecognizerTool.DeleteRecognizerByLogin(m_userLogin);
             }
 
             Close();

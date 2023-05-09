@@ -65,7 +65,7 @@ namespace AuthFaceIDModernUI.FaceID
             m_isStartSaveFaces = true;
         }
 
-        private Mat GetCurrentFrame()
+        private Mat? GetCurrentFrame()
         {
             Mat? newFrame = new();
 

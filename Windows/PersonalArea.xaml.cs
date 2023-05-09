@@ -89,7 +89,7 @@ namespace AuthFaceIDModernUI.Windows
         {
             UsersDataBase db = new();
             db.DeleteFacesByLogin(m_userLogin);
-            SaveFacesTools.DeleteFacesByLogin(m_userLogin);
+            FacesRecognizerTool.DeleteRecognizerByLogin(m_userLogin);
             FaceIDButtonsDisable();
         }
 

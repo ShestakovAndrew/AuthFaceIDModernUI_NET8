@@ -9,5 +9,5 @@ public class User
     public string Password { get; set; }
 
     public bool isExistFaceID { get; set; }
-    public string? facesPath { get; set; } 
+    public string? faceRecognizerPath { get; set; } 
 }

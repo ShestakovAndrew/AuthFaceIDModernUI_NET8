@@ -14,19 +14,19 @@
   </ItemGroup>
 
   <ItemGroup>   
-    <PackageReference Include="Emgu.CV" Version="4.6.0.5131" />
-    <PackageReference Include="Emgu.CV.Bitmap" Version="4.6.0.5131" />
-    <PackageReference Include="Emgu.CV.Models" Version="4.6.0.5131" />
-    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.6.0.5131" />
-    <PackageReference Include="Emgu.CV.UI" Version="4.6.0.5131" />
-    <PackageReference Include="Emgu.CV.Wpf" Version="4.6.0.5131" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.8.1-ci204" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.2.23128.3">
+    <PackageReference Include="Emgu.CV" Version="4.7.0.5276" />
+    <PackageReference Include="Emgu.CV.Bitmap" Version="4.7.0.5276" />
+    <PackageReference Include="Emgu.CV.Models" Version="4.7.0.5276" />
+    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.7.0.5276" />
+    <PackageReference Include="Emgu.CV.UI" Version="4.7.0.5276" />
+    <PackageReference Include="Emgu.CV.Wpf" Version="4.7.0.5276" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.8.1-ci253" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.3.23174.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-preview.2.23128.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0-preview.2.23128.3">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-preview.3.23174.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0-preview.3.23174.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -72,7 +72,7 @@ namespace AuthFaceIDModernUI.DataBase
             if (userFromDB != null)
             {
                 userFromDB.isExistFaceID = false;
-                userFromDB.facesPath = null;
+                userFromDB.faceRecognizerPath = null;
                 usersContext.SaveChanges();
                 return true;
             }
@@ -86,7 +86,7 @@ namespace AuthFaceIDModernUI.DataBase
 
             if (userToChange != null) 
             {
-                userToChange.facesPath = System.IO.Path.Join(Config.UserPhotosPath, userLogin.ToString());
+                userToChange.faceRecognizerPath = System.IO.Path.Join(Config.FaceRecognizersPath, userLogin.ToString());
                 userToChange.isExistFaceID = true;
                 usersContext.SaveChanges();
                 return true;
