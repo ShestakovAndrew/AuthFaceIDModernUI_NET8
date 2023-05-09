@@ -1,43 +1,31 @@
 ﻿using System.Windows;
-using System.Drawing;
-using System.Windows.Threading;
 using System.Windows.Input;
 
-using Emgu.CV;
-using Emgu.CV.Structure;
 using AuthFaceIDModernUI.DataBase;
+using AuthFaceIDModernUI.FaceID;
 
 namespace AuthFaceIDModernUI.Windows
 {
     public partial class SetUserFaceID : Window
     {
-        private CascadeClassifier m_faceDetected;
+        private int m_countFacesToLearn = 200;
 
-        private VideoCapture? m_capture;
-
+        private FaceCamera m_faceCamera;
         private string m_userLogin;
-
-        private Mat? m_userFace;
 
         public SetUserFaceID(string userLogin)
         {
             InitializeComponent();
 
-            CvInvoke.UseOpenCL = false;
-
-            try
-            {
-                m_capture = new VideoCapture();
-                m_capture.ImageGrabbed += ProcessFrame!;
-                m_capture.Start();
-            }
-            catch (NullReferenceException excpt)
-            {
-                MessageBox.Show(excpt.Message);
-            }
-
-            m_faceDetected = new CascadeClassifier(@"D:\CourseWork\FaceID\haarcascade_frontalface_default.xml");
             m_userLogin = userLogin;
+            m_faceCamera = new FaceCamera(
+                CameraImages, 
+                StartGetFacesButton,
+                FaceProgressBar,
+                m_countFacesToLearn
+            );
+
+            m_faceCamera.TurnOn();
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -45,82 +33,38 @@ namespace AuthFaceIDModernUI.Windows
             base.OnMouseLeftButtonDown(e);
             DragMove();
         }
-        
-        private Mat GetCurrentFrame()
+
+        private void StartGetFacesButton_Click(object sender, RoutedEventArgs e)
         {
-            Mat? newFrame = new();
-
-            if (m_capture != null && m_capture.Ptr != IntPtr.Zero)
+            if (StartGetFacesButton.Content.ToString() == "Сохранить")
             {
-                m_capture.Retrieve(newFrame, 0);
-            }
-
-            return newFrame;
-        }
-        
-        private void ProcessFrame(object sender, EventArgs e)
-        {
-            if (m_capture != null && m_capture.Ptr != IntPtr.Zero)
-            {
-                Mat? currentFrame = GetCurrentFrame();
-
-                if (currentFrame != null) 
+                UsersDataBase db = new UsersDataBase();
+                
+                if (db.IsExistFaceIDByLogin(m_userLogin))
                 {
-                    Rectangle faceOnFrame = m_faceDetected.DetectMultiScale(currentFrame).FirstOrDefault();
-
-                    if (!faceOnFrame.IsEmpty) 
-                    {
-                        Mat faceImage = new Mat(currentFrame, faceOnFrame);
-
-                        CvInvoke.Resize(faceImage, faceImage, new System.Drawing.Size(150, 150));
-                        CvInvoke.Rectangle(currentFrame, faceOnFrame, new Bgr(Color.DarkGreen).MCvScalar);
-                        CvInvoke.PutText(
-                            currentFrame,
-                            m_userLogin,
-                            new System.Drawing.Point(faceOnFrame.X, faceOnFrame.Y - 10),
-                            Emgu.CV.CvEnum.FontFace.HersheyComplex,
-                            1.0,
-                            new Bgr(Color.DarkGreen).MCvScalar
-                        );
-
-                        m_userFace = faceImage;
-                    }
-                    else
-                    {
-                        m_userFace = null;
-                    }
+                    SaveFacesTools.DeleteFacesByLogin(m_userLogin);
+                    db.DeleteFacesByLogin(m_userLogin);
                 }
 
-                Dispatcher.BeginInvoke(
-                        DispatcherPriority.Normal,
-                        new Action(() => CameraImages.Source = BitmapSourceExtension.ToBitmapSource(currentFrame))
-                    );
-            }
-        }
-
-        private void SaveFaceImageButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (m_userFace != null) 
-            {
-                UsersDataBase db = new();
-                db.SaveFaceByLogin(m_userFace!, m_userLogin);
-                SaveClose();
+                db.SaveFacesByLogin(m_userLogin);
+                SaveFacesTools.SaveFacesByLogin(m_userLogin, m_faceCamera.m_userFaces);
+                UsersDataBase usersDataBase = new UsersDataBase();
+                usersDataBase.SaveFacesByLogin(m_userLogin);
+                m_faceCamera.TurnOff();
+                Close();
             }
             else
             {
-                MessageBox.Show("Убедитесь, чтобы ваше лицо было определено и находилось в рамке.");
-            }
+                StartGetFacesButton.IsEnabled = false;
+                m_faceCamera.StartSaveFaces();
+                FaceProgressBar.IsIndeterminate = true;
+            }    
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveClose();
-        }
-
-        private void SaveClose()
-        {
-            m_capture?.Stop();
-            m_capture?.Dispose();
+            m_faceCamera.TurnOff();
+            SaveFacesTools.DeleteFacesByLogin(m_userLogin);
             Close();
         }
     }
