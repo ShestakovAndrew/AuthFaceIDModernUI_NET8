@@ -20,9 +20,9 @@ namespace AuthFaceIDModernUI.Windows
             m_userLogin = userLogin;
             TitleTextBlock.Text += userLogin;
 
-
             UsersDataBase db = new();
             FaceIDToggleButton.IsChecked = db.IsExistFaceIDByLogin(m_userLogin);
+
             if (FaceIDToggleButton.IsChecked.Value)
             {
                 FaceIDButtonsEnable();
@@ -93,10 +93,9 @@ namespace AuthFaceIDModernUI.Windows
         private void DeleteFaceID()
         {
             UsersDataBase db = new();
-            if (db.DeleteFaceIDByLogin(m_userLogin))
-            {
-                FaceIDButtonsDisable();
-            }
+            db.DeleteFacesByLogin(m_userLogin);
+            SaveFacesTools.DeleteFacesByLogin(m_userLogin);
+            FaceIDButtonsDisable();
         }
 
         private void FaceIDButtonsDisable()
