@@ -67,7 +67,36 @@ namespace ModernLoginWindow
             }
             else
             {
-                LoginToPersonalArea(LoginTextBox.Text);
+                FaceCamera faceCamera = new();
+                faceCamera.TurnOn();
+
+                EigenFaceRecognizer faceRecognition = FacesRecognizerTool.GetRecognizerByLogin(LoginTextBox.Text);
+                List<Mat> facesToCheck = faceCamera.m_last10UserFaces.ToList();
+
+                List<FaceRecognizer.PredictionResult> predictionResults = new();
+                foreach (Mat face in facesToCheck)
+                {
+                    CvInvoke.CvtColor(face, face, Emgu.CV.CvEnum.ColorConversion.Rgb2Gray, 0);
+                    predictionResults.Add(faceRecognition.Predict(face));
+                }
+
+                double sumDistance = 0;
+                foreach (FaceRecognizer.PredictionResult result in predictionResults)
+                {
+                    sumDistance += result.Distance;
+                }
+                sumDistance /= 30;
+
+                faceCamera.TurnOff();
+
+                if (sumDistance <= 3000)
+                {
+                    LoginToPersonalArea(LoginTextBox.Text);
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка распознования. Повторите попытку.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
         }
 

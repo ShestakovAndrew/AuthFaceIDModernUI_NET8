@@ -58,5 +58,14 @@ namespace AuthFaceIDModernUI.DataBase
                 System.IO.Directory.Delete(userFaceRecognizersPath, true);
             }
         }
+
+        public static EigenFaceRecognizer GetRecognizerByLogin(string userLogin)
+        {
+            EigenFaceRecognizer faceRecognition = new();
+            faceRecognition.Read(
+                System.IO.Path.Join(System.IO.Path.Join(Config.FaceRecognizersPath, userLogin.ToString()), "trainedData.yml")
+            );
+            return faceRecognition;
+        }
     }
 }
