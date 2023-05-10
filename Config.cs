@@ -9,7 +9,7 @@ namespace AuthFaceIDModernUI
 {
     public static class Config
     {
-        public static int CountFacesToLearn = 200;
+        public static int CountFacesToLearn = 100;
         public static string DataBaseName = "users.db";
         public static string FaceRecognizersName = "FaceRecognizers";
         public static string HaarCascadePath = "D:\\CourseWork\\FaceID\\haarcascade_frontalface_default.xml";

@@ -12,7 +12,6 @@ namespace AuthFaceIDModernUI.FaceID
         private VideoCapture? m_capture;
 
         private bool m_isStartSaveFaces;
-        private int m_countFacesToLearn;
 
         public List<Mat> m_userFaces { get; set; }
         public List<Mat> m_last10UserFaces { get; set; }
@@ -92,7 +91,7 @@ namespace AuthFaceIDModernUI.FaceID
                     {
                         Mat faceImage = new(currentFrame, faceOnFrame);
 
-                        CvInvoke.Resize(faceImage, faceImage, new System.Drawing.Size(150, 150));
+                        CvInvoke.Resize(faceImage, faceImage, new System.Drawing.Size(300, 300));
                         CvInvoke.Rectangle(currentFrame, faceOnFrame, new Bgr(System.Drawing.Color.DarkGreen).MCvScalar);
 
                         AddFaceToLatest(faceImage);
@@ -105,7 +104,7 @@ namespace AuthFaceIDModernUI.FaceID
 
                                 m_buttonControl?.Dispatcher.Invoke(() =>
                                 {
-                                    m_buttonControl.Content = m_userFaces.Count.ToString() + " / " + m_countFacesToLearn;
+                                    m_buttonControl.Content = m_userFaces.Count.ToString() + " / " + Config.CountFacesToLearn;
                                 });
                             }
                             else

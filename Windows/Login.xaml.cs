@@ -89,7 +89,7 @@ namespace ModernLoginWindow
 
                 faceCamera.TurnOff();
 
-                if (sumDistance <= 3000)
+                if (sumDistance <= 4000)
                 {
                     LoginToPersonalArea(LoginTextBox.Text);
                 }
