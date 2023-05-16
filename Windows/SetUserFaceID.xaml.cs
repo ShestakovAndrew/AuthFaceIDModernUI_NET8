@@ -33,10 +33,17 @@ namespace AuthFaceIDModernUI.Windows
                 m_faceCamera.TurnOff();
                 faceToCheck = m_faceCamera.GetUserFace();
 
-                CameraImages.Source = BitmapSourceExtension.ToBitmapSource(faceToCheck);
+                if (faceToCheck != null)
+                {
+                    CameraImages.Source = BitmapSourceExtension.ToBitmapSource(faceToCheck);
 
-                m_isFotoSet = true;
-                ChangeButtons();
+                    m_isFotoSet = true;
+                    ChangeButtons();
+                }
+                else
+                {
+                    MessageBox.Show("Убедитесь что ваше лицо находится в квадратике и повторите попытку.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             else
             {
