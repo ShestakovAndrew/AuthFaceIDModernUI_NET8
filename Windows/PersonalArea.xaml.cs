@@ -1,4 +1,5 @@
 ﻿using AuthFaceIDModernUI.DataBase;
+using AuthFaceIDModernUI.FaceID;
 using ModernLoginWindow;
 using System.Windows;
 using System.Windows.Input;
@@ -8,7 +9,6 @@ namespace AuthFaceIDModernUI.Windows
     public partial class PersonalArea : Window
     {
         private bool m_isWindowLoading {  get; set; }
-
         private string m_userLogin { get; set; }
 
         public PersonalArea(string userLogin)
@@ -31,10 +31,49 @@ namespace AuthFaceIDModernUI.Windows
             DragMove();
         }
 
-        private void ChangeFaceIDButton_Click(object sender, RoutedEventArgs e)
+        private async void FaceIDToggleButton_CheckedAsync(object sender, RoutedEventArgs e)
         {
-            SetUserFaceID userFaceID = new(m_userLogin, true);
-            userFaceID.ShowDialog();
+            if (!m_isWindowLoading)
+            {
+                IsEnabled = false;
+                SetUserFaceID userFaceID = new();
+
+                if (userFaceID.ShowDialog() == true)
+                {
+                    UsersDataBase db = new();
+                    if (await FaceIDTool.SetPersonID(userFaceID.faceToCheck!, db.GetIDByLogin(m_userLogin)))
+                    {
+                        db.AddFaceByLogin(m_userLogin);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ошибка в привязке для ID пользователя лица. Повторите попытку.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Лицо для распознания не выбрано.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                IsEnabled = true;
+            }
+
+            SetFaceIDToggleButton();
+        }
+
+        private async void FaceIDToggleButton_UncheckedAsync(object sender, RoutedEventArgs e)
+        {
+            UsersDataBase db = new();
+            db.DeleteFaceByLogin(m_userLogin);
+
+            if (await FaceIDTool.DeletPersonID(db.GetIDByLogin(m_userLogin)))
+            {
+                FaceIDButtonsDisable();
+            }
+            else
+            {
+                MessageBox.Show("Ошибка в удалении привязки ID пользователя и его лица. Повторите попытку.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void DeleteFaceIDButton_Click(object sender, RoutedEventArgs e)
@@ -56,20 +95,10 @@ namespace AuthFaceIDModernUI.Windows
             Close();
         }
 
-        private void FaceIDToggleButton_Checked(object sender, RoutedEventArgs e)
-        {
-            if (!m_isWindowLoading)
-            {
-                SetUserFaceID userFaceID = new SetUserFaceID(m_userLogin, false);
-                userFaceID.ShowDialog();
-            }
-
-            SetFaceIDToggleButton();
-        }
-
         private void SetFaceIDToggleButton()
         {
             UsersDataBase db = new();
+
             if (db.IsExistFaceIDByLogin(m_userLogin))
             {
                 FaceIDButtonsEnable();
@@ -80,30 +109,15 @@ namespace AuthFaceIDModernUI.Windows
             }
         }
 
-        private void FaceIDToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            DeleteFaceID();
-        }
-
-        private void DeleteFaceID()
-        {
-            UsersDataBase db = new();
-            db.DeleteFacesByLogin(m_userLogin);
-            FacesRecognizerTool.DeleteRecognizerByLogin(m_userLogin);
-            FaceIDButtonsDisable();
-        }
-
         private void FaceIDButtonsDisable()
         {
             FaceIDToggleButton.IsChecked = false;
-            ChangeFaceIDButton.IsEnabled = false;
             DeleteFaceIDButton.IsEnabled = false;
         }
 
         private void FaceIDButtonsEnable()
         {
             FaceIDToggleButton.IsChecked = true;
-            ChangeFaceIDButton.IsEnabled = true;
             DeleteFaceIDButton.IsEnabled = true;
         }
     }

@@ -21,6 +21,7 @@
     <PackageReference Include="Emgu.CV.UI" Version="4.7.0.5276" />
     <PackageReference Include="Emgu.CV.Wpf" Version="4.7.0.5276" />
     <PackageReference Include="MaterialDesignThemes" Version="4.8.1-ci253" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.3.23174.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -36,10 +37,6 @@
   <ItemGroup>
     <Resource Include="Images\face-id.png" />
     <Resource Include="Images\logo.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="VoiceID\" />
   </ItemGroup>
 
 </Project>

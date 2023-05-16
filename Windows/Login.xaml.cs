@@ -8,6 +8,8 @@ using Emgu.CV.Structure;
 using Emgu.CV;
 using Emgu.CV.Face;
 using AuthFaceIDModernUI.FaceID;
+using AuthFaceIDModernUI.API;
+using System.Windows.Forms;
 
 namespace ModernLoginWindow
 {
@@ -49,7 +51,7 @@ namespace ModernLoginWindow
             LoginToPersonalArea(LoginTextBox.Text);
         }
 
-        private void FaceIDButton_Click(object sender, RoutedEventArgs e)
+        private async void FaceIDButton_Click(object sender, RoutedEventArgs e)
         {
             UsersDataBase db = new();
 
@@ -62,40 +64,27 @@ namespace ModernLoginWindow
             if (!db.IsExistFaceIDByLogin(LoginTextBox.Text))
             {
                 FaceIDButton.BorderBrush = new SolidColorBrush(Colors.Red);
-                MessageBox.Show("Для данного пользователя не настроен FaceID.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                System.Windows.MessageBox.Show("Для данного пользователя не настроен FaceID.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             else
             {
-                FaceCamera faceCamera = new();
-                faceCamera.TurnOn();
+                SetUserFaceID setUserFaceID = new();
 
-                EigenFaceRecognizer faceRecognition = FacesRecognizerTool.GetRecognizerByLogin(LoginTextBox.Text);
-                List<Mat> facesToCheck = faceCamera.m_last10UserFaces.ToList();
-
-                List<FaceRecognizer.PredictionResult> predictionResults = new();
-                foreach (Mat face in facesToCheck)
+                if (setUserFaceID.ShowDialog() == true)
                 {
-                    CvInvoke.CvtColor(face, face, Emgu.CV.CvEnum.ColorConversion.Rgb2Gray, 0);
-                    predictionResults.Add(faceRecognition.Predict(face));
-                }
-
-                double sumDistance = 0;
-                foreach (FaceRecognizer.PredictionResult result in predictionResults)
-                {
-                    sumDistance += result.Distance;
-                }
-                sumDistance /= 30;
-
-                faceCamera.TurnOff();
-
-                if (sumDistance <= 4000)
-                {
-                    LoginToPersonalArea(LoginTextBox.Text);
+                    if (await FaceIDTool.RecornizeIDOnImage(setUserFaceID.faceToCheck!) == db.GetIDByLogin(LoginTextBox.Text))
+                    {
+                        LoginToPersonalArea(LoginTextBox.Text);
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show("Ошибка распознования. Повторите попытку.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Ошибка распознования. Повторите попытку.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    System.Windows.MessageBox.Show("Лицо для распознания не выбрано.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
@@ -109,7 +98,7 @@ namespace ModernLoginWindow
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void LoginTextBox_TextChanged(object sender, TextChangedEventArgs e)

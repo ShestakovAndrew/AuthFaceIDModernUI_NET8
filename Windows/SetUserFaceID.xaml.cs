@@ -1,30 +1,27 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
-
 using AuthFaceIDModernUI.DataBase;
 using AuthFaceIDModernUI.FaceID;
+using Emgu.CV;
 
 namespace AuthFaceIDModernUI.Windows
 {
-    public partial class SetUserFaceID : Window
+    public partial class SetUserFaceID
     {
         private FaceCamera m_faceCamera;
-        private string m_userLogin;
-        private bool m_isFacesToChange;
+        private bool m_isFotoSet;
+        public Mat? faceToCheck;
 
-        public SetUserFaceID(string userLogin, bool isFacesToChange)
+        public SetUserFaceID()
         {
             InitializeComponent();
 
-            m_userLogin = userLogin;
-            m_isFacesToChange = isFacesToChange;
-
-            m_faceCamera = new FaceCamera(
-                CameraImages, 
-                StartGetFacesButton,
-                FaceProgressBar
-            );
-
+            m_isFotoSet = false;
+            m_faceCamera = new FaceCamera(CameraImages);
             m_faceCamera.TurnOn();
         }
 
@@ -34,42 +31,44 @@ namespace AuthFaceIDModernUI.Windows
             DragMove();
         }
 
-        private void StartGetFacesButton_Click(object sender, RoutedEventArgs e)
+        private void DoFotoButton_Click(object sender, RoutedEventArgs e)
         {
-            if (StartGetFacesButton.Content.ToString() == "Сохранить")
+            if (DoFotoButton.Content.ToString() == "Сделать фото")
             {
-                UsersDataBase db = new();
-                
-                if (db.IsExistFaceIDByLogin(m_userLogin))
-                {
-                    FacesRecognizerTool.DeleteRecognizerByLogin(m_userLogin);
-                    db.DeleteFacesByLogin(m_userLogin);
-                }
-
-                FacesRecognizerTool.SaveRecognizerByLogin(m_userLogin, m_faceCamera.m_userFaces);
-                db.SaveFacesByLogin(m_userLogin);
-
                 m_faceCamera.TurnOff();
-                Close();
+                faceToCheck = m_faceCamera.GetUserFace();
+
+                CameraImages.Source = BitmapSourceExtension.ToBitmapSource(faceToCheck);
+
+                m_isFotoSet = true;
+                ChangeButtons();
             }
             else
             {
-                StartGetFacesButton.IsEnabled = false;
-                m_faceCamera.StartSaveFaces();
-                FaceProgressBar.IsIndeterminate = true;
-            }    
+                DialogResult = true;
+                Close();
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            m_faceCamera.TurnOff();
-
-            if (!m_isFacesToChange)
+            if (m_isFotoSet)
             {
-                FacesRecognizerTool.DeleteRecognizerByLogin(m_userLogin);
+                m_isFotoSet = false;
+                ChangeButtons();
+                m_faceCamera.TurnOn();
             }
+            else
+            {
+                DialogResult = false;
+                Close();
+            }
+        }
 
-            Close();
+        private void ChangeButtons()
+        {
+            DoFotoButton.Content = m_isFotoSet ? "Сохранить лицо" : "Сделать фото";
+            BackButton.Content = m_isFotoSet ? "Назад" : "Закрыть";
         }
     }
 }
