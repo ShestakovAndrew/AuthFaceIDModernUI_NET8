@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="PersonalArea" Height="600" Width="450"
+        Title="PersonalArea" Height="210" Width="360"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{x:Null}"
         AllowsTransparency="True"
@@ -19,50 +19,11 @@
         materialDesign:ElevationAssist.Elevation="Dp4">
         <materialDesign:DialogHost CloseOnClickAway="true" x:Name="DialogHost">
             <StackPanel>
-                <Image x:Name="LogoImage" Source="../Images/logo.png"
-                       Margin="0 60 0 5"
-                       Height="100" />
-                <TextBlock x:Name="TitleTextBlock" Text="Здравствуйте, "
-                           Margin="0 25 0 5"
-                           HorizontalAlignment="Center"
+                <TextBlock x:Name="TitleTextBlock"
+                           Margin="0,20,0,5"
                            FontSize="28"
-                           FontWeight="Bold" />
-                <StackPanel
-                    Orientation="Horizontal" Width="140">
-                    <TextBlock x:Name="FaceIDTextBlock" Text="Face ID"
-                           Margin="0 0 0 0"
-                           FontSize="25"
-                           FontWeight="Bold" />
-                    <ToggleButton x:Name="FaceIDToggleButton"
-                        Margin="20 0 0 0"
-                        FontSize="24"
-                        Opacity="0.995"
-                        Cursor="Hand"
-                        Checked="FaceIDToggleButton_CheckedAsync"
-                        Unchecked="FaceIDToggleButton_UncheckedAsync" />
-                </StackPanel>
+                           FontWeight="Bold" Height="50" HorizontalAlignment="Center" Text=", вы вошли!" />
 
-                <Button Content="Удалить Face ID"
-                    x:Name="DeleteFaceIDButton"
-                    Margin="0 10 0 0"
-                    Style="{StaticResource MaterialDesignFlatMidBgButton}"
-                    materialDesign:ElevationAssist.Elevation="Dp0"
-                    Height="53"
-                    Width="300"
-                    materialDesign:ButtonAssist.CornerRadius="10"
-                    FontSize="18"
-                    Click="DeleteFaceIDButton_Click" Background="#FFBB2222" BorderBrush="#FFBB2222" />
-
-                <Button Content="Сменить пароль"
-                    x:Name="ChangePasswordButton"
-                    Margin="0 30 0 0"
-                    Style="{StaticResource MaterialDesignFlatMidBgButton}"
-                    materialDesign:ElevationAssist.Elevation="Dp0"
-                    Height="53"
-                    Width="300"
-                    materialDesign:ButtonAssist.CornerRadius="10"
-                    FontSize="18"
-                    Click="ChangePasswordButton_Click" />
                 <Button Content="Выйти"
                     x:Name="ExitButton"
                     Margin="0 10 0 0"
