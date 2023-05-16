@@ -8,11 +8,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Images\face-id.png" />
-    <None Remove="Images\logo.png" />
-  </ItemGroup>
-
   <ItemGroup>   
     <PackageReference Include="Emgu.CV" Version="4.7.0.5276" />
     <PackageReference Include="Emgu.CV.Bitmap" Version="4.7.0.5276" />
@@ -32,11 +27,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NAudio" Version="2.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\face-id.png" />
-    <Resource Include="Images\logo.png" />
   </ItemGroup>
 
 </Project>
