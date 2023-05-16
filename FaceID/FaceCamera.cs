@@ -10,7 +10,7 @@ namespace AuthFaceIDModernUI.FaceID
         private VideoCapture? m_capture;
         private CascadeClassifier m_faceClassifier;
         private System.Windows.Controls.Image? m_faceViewControl;
-        private Mat m_userFace;
+        private Mat? m_userFace;
 
         public FaceCamera(
             System.Windows.Controls.Image imageControl
@@ -23,7 +23,7 @@ namespace AuthFaceIDModernUI.FaceID
             m_userFace = new Mat();
         }
 
-        public Mat GetUserFace()
+        public Mat? GetUserFace()
         {
             return m_userFace;
         }
