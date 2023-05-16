@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-
-namespace AuthFaceIDModernUI
+﻿namespace AuthFaceIDModernUI
 {
     public static class Config
     {
-        public static int CountFacesToLearn = 100;
-        public static string DataBaseName = "users.db";
-        public static string FaceRecognizersName = "FaceRecognizers";
-        public static string HaarCascadePath = "D:\\CourseWork\\FaceID\\haarcascade_frontalface_default.xml";
-        public static string FaceRecognizersPath = System.IO.Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), FaceRecognizersName);
+        private static string DataBaseName = "users.db";
+        private static string TempFolderName = "Temp";
+
         public static string DataBasePath = System.IO.Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DataBaseName);
+        public static string TempFolderPath = System.IO.Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), TempFolderName);
+        public static string HaarCascadePath = System.IO.Path.Join(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\FaceID\\haarcascade_frontalface_default.xml");
+
+        public static string HostVisionAPI = "https://smarty.mail.ru/api/v1/persons/";
+        public static string OAuthProvider = "mcs";
+        public static string OAuthToken = "your token"; //set your token from VK Cloud
     }
 }
