@@ -57,29 +57,25 @@ namespace AuthFaceIDModernUI.Windows
                 return;
             }
 
-            if (db.AddNewUser(NewLoginTextBox.Text, NewPasswordBox.Password))
-            {
-                SetUserFaceID setUserFaceID = new();
+            SetUserFaceID setUserFaceID = new();
 
-                if (setUserFaceID.ShowDialog() == true)
+            if (setUserFaceID.ShowDialog() == true)
+            {
+                if (
+                    db.AddNewUser(NewLoginTextBox.Text, NewPasswordBox.Password) && 
+                    await FaceIDTool.SetPersonID(setUserFaceID.faceToCheck!, db.GetIDByLogin(NewLoginTextBox.Text))
+                    )
                 {
-                    if (await FaceIDTool.SetPersonID(setUserFaceID.faceToCheck!, db.GetIDByLogin(NewLoginTextBox.Text)))
-                    {
-                        OpenNewLoginWindow();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ошибка добавления лица. Повторите попытку.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    OpenNewLoginWindow();
                 }
                 else
                 {
-                    MessageBox.Show("Лицо для распознания не выбрано.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Ошибка добавления лица. Повторите попытку.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Не удалось добавить пользователя в базу данных", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Лицо для распознания не выбрано.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
