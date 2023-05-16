@@ -1,13 +1,5 @@
 ﻿using AuthFaceIDModernUI.Secure;
-using Emgu.CV;
-using Emgu.CV.Structure;
 using ModernLoginWindow;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace AuthFaceIDModernUI.DataBase
 {
@@ -20,16 +12,18 @@ namespace AuthFaceIDModernUI.DataBase
             usersContext = new UsersContext();
         }
 
-        public bool IsLoginExistInDB(string userLogin)
+        public bool AddFaceByLogin(string userLogin)
         {
-            try
+            User? userToChange = GetUserFromDBByLogin(userLogin);
+
+            if (userToChange != null)
             {
-                return usersContext.Users.Any(u => u.Login == userLogin);
+                userToChange.isExistFaceID = true;
+                usersContext.SaveChanges();
+                return true;
             }
-            catch 
-            { 
-                return false; 
-            }
+
+            return false;
         }
 
         public bool AddNewUser(string login, string password)
@@ -39,23 +33,11 @@ namespace AuthFaceIDModernUI.DataBase
             return true;
         }
 
-        public bool IsPasswordCorrectForUser(string userLogin, string password)
-        {
-            User? userFromDB = GetUserFromDBByLogin(userLogin);
-
-            if (userFromDB != null)
-            {
-                return PasswordHasher.Verify(userFromDB.Password, password);
-            }
-
-            return false;
-        }
-
         public bool ChangeUserPassword(string userLogin, string password)
         {
             User? userToChange = GetUserFromDBByLogin(userLogin);
 
-            if (userToChange != null) 
+            if (userToChange != null)
             {
                 userToChange.Password = PasswordHasher.Hash(password);
                 usersContext.SaveChanges();
@@ -65,14 +47,13 @@ namespace AuthFaceIDModernUI.DataBase
             return false;
         }
 
-        public bool DeleteFacesByLogin(string userLogin)
+        public bool DeleteFaceByLogin(string userLogin)
         {
             User? userFromDB = GetUserFromDBByLogin(userLogin);
 
             if (userFromDB != null)
             {
                 userFromDB.isExistFaceID = false;
-                userFromDB.faceRecognizerPath = null;
                 usersContext.SaveChanges();
                 return true;
             }
@@ -80,19 +61,16 @@ namespace AuthFaceIDModernUI.DataBase
             return false;
         }
 
-        public bool SaveFacesByLogin(string userLogin)
+        public int GetIDByLogin(string userLogin)
         {
-            User? userToChange = GetUserFromDBByLogin(userLogin);
+            User? userFromDB = GetUserFromDBByLogin(userLogin);
 
-            if (userToChange != null) 
+            if (userFromDB != null)
             {
-                userToChange.faceRecognizerPath = System.IO.Path.Join(Config.FaceRecognizersPath, userLogin.ToString());
-                userToChange.isExistFaceID = true;
-                usersContext.SaveChanges();
-                return true;
+                return userFromDB.Id;
             }
 
-            return false;
+            throw new Exception("Пользователь не найден");
         }
 
         public bool IsExistFaceIDByLogin(string userLogin)
@@ -107,9 +85,26 @@ namespace AuthFaceIDModernUI.DataBase
             throw new Exception("Пользователь не найден");
         }
 
+        public bool IsLoginExistInDB(string userLogin)
+        {
+            return GetUserFromDBByLogin(userLogin) != null;
+        }
+
+        public bool IsPasswordCorrectForUser(string userLogin, string password)
+        {
+            User? userFromDB = GetUserFromDBByLogin(userLogin);
+
+            if (userFromDB != null)
+            {
+                return PasswordHasher.Verify(userFromDB.Password, password);
+            }
+
+            return false;
+        }
+
         private User? GetUserFromDBByLogin(string userLogin)
         {
-            return usersContext.Users.Where(u => u.Login == userLogin).First();
+            return usersContext.Users!.Where(u => u.Login == userLogin).FirstOrDefault();
         }
     }
 }
