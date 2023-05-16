@@ -26,9 +26,6 @@
                     StaysOpen="False"
                     Height="25">
                     <StackPanel>
-                        <Button Content="О программе"
-                            x:Name="AboutButton"
-                            ToolTip="Информация о программе" />
                         <Button x:Name="ExitButton"
                             ToolTip="Закрыть приложение"
                             Content="Выход"
