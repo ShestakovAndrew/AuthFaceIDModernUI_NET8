@@ -62,8 +62,8 @@ namespace AuthFaceIDModernUI.Windows
 
         private void ChangeButtons()
         {
-            DoFotoButton.Content = m_isFotoSet ? "Сохранить лицо" : "Сделать фото";
-            BackButton.Content = m_isFotoSet ? "Назад" : "Закрыть";
+            DoFotoButton.Content = m_isFotoSet ? "Сканировать" : "Сделать фото";
+            BackButton.Content = m_isFotoSet ? "Переснять" : "Закрыть";
         }
     }
 }

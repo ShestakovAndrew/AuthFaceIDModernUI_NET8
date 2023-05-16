@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:AuthFaceIDModernUI.Windows"
         mc:Ignorable="d"
-        Title="SetUserFaceID" Height="600" Width="700"
+        Title="SetUserFaceID" Height="380" Width="400"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{x:Null}"
         AllowsTransparency="True"
@@ -24,30 +24,30 @@
             <StackPanel>
 
                 <Image x:Name="CameraImages"
-                       Height="400"
-                       Width="550"
+                       Height="200"
+                       Width="300"
                        Margin="0 30 0 0" />
 
                 <StackPanel
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
-                    Margin="0 40 0 0" Cursor="Hand">
+                    Margin="0 20 0 0" Cursor="Hand">
                     <Button Content="Закрыть"
                     x:Name="BackButton"
                     Style="{StaticResource MaterialDesignFlatButton}"
                     materialDesign:ElevationAssist.Elevation="Dp0"
                     Height="53"
-                    Width="200"
+                    Width="140"
                     materialDesign:ButtonAssist.CornerRadius="10"
                     FontSize="18"
                     Foreground="Red" Background="White"
-                    Margin="0 0 100 0" Click="BackButton_Click" Cursor="Hand" />
+                    Margin="0 0 10 0" Click="BackButton_Click" Cursor="Hand" />
                     <Button Content="Сделать фото"
                     x:Name="DoFotoButton"
                     Style="{StaticResource MaterialDesignFlatMidBgButton}"
                     materialDesign:ElevationAssist.Elevation="Dp0"
                     Height="53"
-                    Width="208"
+                    Width="150"
                     materialDesign:ButtonAssist.CornerRadius="10"
                     FontSize="18"
                     Margin="0 0 10 0" Click="DoFotoButton_Click" Cursor="Hand" />
