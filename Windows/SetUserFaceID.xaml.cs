@@ -1,12 +1,7 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Input;
-using AuthFaceIDModernUI.DataBase;
-using AuthFaceIDModernUI.FaceID;
+﻿using AuthFaceIDModernUI.FaceID;
 using Emgu.CV;
+using System.Windows;
+using System.Windows.Input;
 
 namespace AuthFaceIDModernUI.Windows
 {

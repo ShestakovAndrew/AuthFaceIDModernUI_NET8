@@ -17,24 +17,21 @@
         UniformCornerRadius="15"
         Background="{DynamicResource MaterialDesignPaper}"
         Margin="25"
-        materialDesign:ElevationAssist.Elevation="Dp4"
-    >
-        <materialDesign:DialogHost 
-            CloseOnClickAway="true" 
-            x:Name="DialogHost"
-        >
+        materialDesign:ElevationAssist.Elevation="Dp4">
+        <materialDesign:DialogHost
+            CloseOnClickAway="true"
+            x:Name="DialogHost">
             <StackPanel>
 
-                <Image x:Name="CameraImages" 
-                       Height="400" 
+                <Image x:Name="CameraImages"
+                       Height="400"
                        Width="550"
-                       Margin="0 30 0 0"/>
+                       Margin="0 30 0 0" />
 
-                <StackPanel 
+                <StackPanel
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
-                    Margin="0 40 0 0" Cursor="Hand"
-                >
+                    Margin="0 40 0 0" Cursor="Hand">
                     <Button Content="Закрыть"
                     x:Name="BackButton"
                     Style="{StaticResource MaterialDesignFlatButton}"
@@ -42,10 +39,9 @@
                     Height="53"
                     Width="200"
                     materialDesign:ButtonAssist.CornerRadius="10"
-                    FontSize="18" 
+                    FontSize="18"
                     Foreground="Red" Background="White"
-                    Margin="0 0 100 0" Click="BackButton_Click" Cursor="Hand"
-                />
+                    Margin="0 0 100 0" Click="BackButton_Click" Cursor="Hand" />
                     <Button Content="Сделать фото"
                     x:Name="DoFotoButton"
                     Style="{StaticResource MaterialDesignFlatMidBgButton}"
@@ -54,8 +50,7 @@
                     Width="208"
                     materialDesign:ButtonAssist.CornerRadius="10"
                     FontSize="18"
-                    Margin="0 0 10 0" Click="DoFotoButton_Click" Cursor="Hand"
-                />
+                    Margin="0 0 10 0" Click="DoFotoButton_Click" Cursor="Hand" />
                 </StackPanel>
             </StackPanel>
         </materialDesign:DialogHost>

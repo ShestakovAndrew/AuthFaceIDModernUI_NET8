@@ -12,57 +12,55 @@
         WindowStyle="None"
         WindowStartupLocation="CenterScreen">
 
-    <materialDesign:Card 
+    <materialDesign:Card
         UniformCornerRadius="15"
         Background="{DynamicResource MaterialDesignPaper}"
         Margin="25"
-        materialDesign:ElevationAssist.Elevation="Dp4"
-    >
+        materialDesign:ElevationAssist.Elevation="Dp4">
         <materialDesign:DialogHost CloseOnClickAway="true" x:Name="DialogHost">
             <StackPanel>
-                <materialDesign:PopupBox x:Name="LogInPopupBox" 
-                    HorizontalAlignment="Right" 
+                <materialDesign:PopupBox x:Name="LogInPopupBox"
+                    HorizontalAlignment="Right"
                     Margin="0 20 20 0"
                     PlacementMode="BottomAndAlignRightEdges"
                     StaysOpen="False"
                     Height="25">
                     <StackPanel>
-                        <Button Content="О программе" 
+                        <Button Content="О программе"
                             x:Name="AboutButton"
-                            ToolTip="Информация о программе"/>
+                            ToolTip="Информация о программе" />
                         <Button x:Name="ExitButton"
-                            ToolTip="Закрыть приложение" 
+                            ToolTip="Закрыть приложение"
                             Content="Выход"
                             IsCancel="True"
                             Margin="0 8 0 0"
-                            Click="ExitButton_Click"/>
+                            Click="ExitButton_Click" />
                     </StackPanel>
                 </materialDesign:PopupBox>
 
-                <Image x:Name="LogoImage" Source="../Images/logo.png" 
-                       Margin="0 60 0 5" 
-                       Height="100"/>
+                <Image x:Name="LogoImage" Source="../Images/logo.png"
+                       Margin="0 60 0 5"
+                       Height="100" />
 
-                <TextBlock x:Name="TitleTextBlock" Text="С возвращением!" 
-                           Margin="0 25 0 5" 
-                           HorizontalAlignment="Center" 
-                           FontSize="28" 
-                           FontWeight="Bold"/>
-                <TextBlock x:Name="SubTitleTextBlock" Text="Войдите в свой аккаунт:" 
-                           Margin="0 25 0 5" 
-                           HorizontalAlignment="Center" 
-                           FontSize="17" 
-                           FontWeight="SemiBold"/>
+                <TextBlock x:Name="TitleTextBlock" Text="С возвращением!"
+                           Margin="0 25 0 5"
+                           HorizontalAlignment="Center"
+                           FontSize="28"
+                           FontWeight="Bold" />
+                <TextBlock x:Name="SubTitleTextBlock" Text="Войдите в свой аккаунт:"
+                           Margin="0 25 0 5"
+                           HorizontalAlignment="Center"
+                           FontSize="17"
+                           FontWeight="SemiBold" />
 
-                <TextBox x:Name="LoginTextBox"   
+                <TextBox x:Name="LoginTextBox"
                     materialDesign:HintAssist.Hint="Введите логин"
                     Margin="0 20 0 0"
                     Width="300"
                     FontSize="18"
                     BorderThickness="2"
                     BorderBrush="Gray"
-                    Style="{StaticResource MaterialDesignOutlinedTextBox}" TextChanged="LoginTextBox_TextChanged"
-                />
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}" TextChanged="LoginTextBox_TextChanged" />
                 <PasswordBox x:Name="PasswordBox"
                     materialDesign:HintAssist.Hint="Введите пароль"
                     Margin="0 20 0 0"
@@ -70,10 +68,9 @@
                     FontSize="18"
                     BorderThickness="2"
                     BorderBrush="Gray"
-                    Style="{StaticResource MaterialDesignOutlinedPasswordBox}" PasswordChanged="PasswordBox_PasswordChanged"
-                />
+                    Style="{StaticResource MaterialDesignOutlinedPasswordBox}" PasswordChanged="PasswordBox_PasswordChanged" />
 
-                <StackPanel 
+                <StackPanel
                     Orientation="Horizontal"
                     Margin="0 20 0 0"
                     HorizontalAlignment="Center">
@@ -83,10 +80,9 @@
                         Height="50"
                         Width="50"
                         materialDesign:ButtonAssist.CornerRadius="10"
-                        Margin="0 0 10 0" Cursor="Hand" BorderBrush="Black" Foreground="{x:Null}" Click="FaceIDButton_Click"
-                        >
+                        Margin="0 0 10 0" Cursor="Hand" BorderBrush="Black" Foreground="{x:Null}" Click="FaceIDButton_Click">
                         <Button.Background>
-                            <ImageBrush ImageSource="../Images/face-id.png"/>
+                            <ImageBrush ImageSource="../Images/face-id.png" />
                         </Button.Background>
                     </Button>
 
@@ -98,9 +94,7 @@
                         Width="240"
                         IsDefault="True"
                         materialDesign:ButtonAssist.CornerRadius="10"
-                        FontSize="18" Click="LoginButton_Click"
-                />
-
+                        FontSize="18" Click="LoginButton_Click" />
                 </StackPanel>
 
                 <Button Content="Создать аккаунт"
@@ -111,9 +105,7 @@
                     Height="53"
                     Width="300"
                     materialDesign:ButtonAssist.CornerRadius="10"
-                    FontSize="18" Click="SignUpButton_Click"
-                />
-
+                    FontSize="18" Click="SignUpButton_Click" />
             </StackPanel>
         </materialDesign:DialogHost>
     </materialDesign:Card>

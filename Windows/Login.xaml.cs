@@ -1,15 +1,10 @@
-﻿using System.Windows;
+﻿using AuthFaceIDModernUI.DataBase;
+using AuthFaceIDModernUI.FaceID;
+using AuthFaceIDModernUI.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using AuthFaceIDModernUI.DataBase;
-using AuthFaceIDModernUI.Windows;
-using Emgu.CV.Structure;
-using Emgu.CV;
-using Emgu.CV.Face;
-using AuthFaceIDModernUI.FaceID;
-using AuthFaceIDModernUI.API;
-using System.Windows.Forms;
 
 namespace ModernLoginWindow
 {
@@ -60,7 +55,7 @@ namespace ModernLoginWindow
                 LoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 return;
             }
-            
+
             if (!db.IsExistFaceIDByLogin(LoginTextBox.Text))
             {
                 FaceIDButton.BorderBrush = new SolidColorBrush(Colors.Red);

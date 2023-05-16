@@ -55,7 +55,7 @@ namespace AuthFaceIDModernUI.FaceID
                 SetUserFaceResponse? response = await VisionAPIService.Set(filePath, personID);
                 DirectoryTool.DeleteTempImage(filePath);
 
-                return (response != null) && (response.status == 200) && (response.body.objects![0].status == 0); 
+                return (response != null) && (response.status == 200) && (response.body.objects![0].status == 0);
             }
             catch (Exception exception)
             {

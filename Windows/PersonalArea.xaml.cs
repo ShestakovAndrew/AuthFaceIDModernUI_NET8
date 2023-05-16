@@ -8,7 +8,7 @@ namespace AuthFaceIDModernUI.Windows
 {
     public partial class PersonalArea : Window
     {
-        private bool m_isWindowLoading {  get; set; }
+        private bool m_isWindowLoading { get; set; }
         private string m_userLogin { get; set; }
 
         public PersonalArea(string userLogin)

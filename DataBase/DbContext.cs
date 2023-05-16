@@ -1,6 +1,4 @@
-﻿using AuthFaceIDModernUI.Secure;
-using Emgu.CV;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ModernLoginWindow;
 
 namespace AuthFaceIDModernUI.DataBase

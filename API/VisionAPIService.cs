@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json;
+using System.IO;
 using System.Net.Http;
-using Newtonsoft.Json;
 
 namespace AuthFaceIDModernUI.API
 {
@@ -72,6 +72,7 @@ namespace AuthFaceIDModernUI.API
 
             return JsonConvert.DeserializeObject<SetUserFaceResponse>(responseString);
         }
+
         public static async Task<TruncateUserFaceResponse?> Truncate()
         {
             using var httpClient = new HttpClient();

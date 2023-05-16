@@ -1,6 +1,4 @@
-﻿using Emgu.CV;
-
-namespace ModernLoginWindow;
+﻿namespace ModernLoginWindow;
 
 public class User
 {

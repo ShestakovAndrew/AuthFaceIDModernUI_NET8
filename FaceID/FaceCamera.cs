@@ -49,6 +49,7 @@ namespace AuthFaceIDModernUI.FaceID
                 MessageBox.Show(excpt.Message);
             }
         }
+
         private Mat? GetCurrentFrame()
         {
             Mat? newFrame = new();
