@@ -1,4 +1,5 @@
 ﻿using AuthFaceIDModernUI.DataBase;
+using AuthFaceIDModernUI.FaceID;
 using ModernLoginWindow;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,13 +10,9 @@ namespace AuthFaceIDModernUI.Windows
 {
     public partial class Registration : Window
     {
-        private UsersDataBase m_dataBase { get; set; }
-
         public Registration()
         {
             InitializeComponent();
-
-            m_dataBase = new UsersDataBase();
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -31,9 +28,11 @@ namespace AuthFaceIDModernUI.Windows
             Close();
         }
 
-        private void CreateAccountButton_Click(object sender, RoutedEventArgs e)
+        private async void AddFaceButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NewLoginTextBox.Text.Length == 0)
+            UsersDataBase db = new();
+
+            if (NewLoginTextBox.Text.Length == 0 || db.IsLoginExistInDB(NewLoginTextBox.Text))
             {
                 NewLoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 return;
@@ -58,16 +57,30 @@ namespace AuthFaceIDModernUI.Windows
                 return;
             }
 
-            if (m_dataBase.IsLoginExistInDB(NewLoginTextBox.Text))
+            if (db.AddNewUser(NewLoginTextBox.Text, NewPasswordBox.Password))
             {
-                NewLoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
-                return;
-            }
+                SetUserFaceID setUserFaceID = new();
 
-            if (m_dataBase.AddNewUser(NewLoginTextBox.Text, NewPasswordBox.Password))
+                if (setUserFaceID.ShowDialog() == true)
+                {
+                    if (await FaceIDTool.SetPersonID(setUserFaceID.faceToCheck!, db.GetIDByLogin(NewLoginTextBox.Text)))
+                    {
+                        OpenNewLoginWindow();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ошибка добавления лица. Повторите попытку.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Лицо для распознания не выбрано.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            else
             {
-                OpenNewLoginWindow();
-            };
+                MessageBox.Show("Не удалось добавить пользователя в базу данных", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
