@@ -12,20 +12,6 @@ namespace AuthFaceIDModernUI.DataBase
             usersContext = new UsersContext();
         }
 
-        public bool AddFaceByLogin(string userLogin)
-        {
-            User? userToChange = GetUserFromDBByLogin(userLogin);
-
-            if (userToChange != null)
-            {
-                userToChange.isExistFaceID = true;
-                usersContext.SaveChanges();
-                return true;
-            }
-
-            return false;
-        }
-
         public bool AddNewUser(string login, string password)
         {
             usersContext.Add(new User { Login = login, Password = PasswordHasher.Hash(password) });
@@ -47,20 +33,6 @@ namespace AuthFaceIDModernUI.DataBase
             return false;
         }
 
-        public bool DeleteFaceByLogin(string userLogin)
-        {
-            User? userFromDB = GetUserFromDBByLogin(userLogin);
-
-            if (userFromDB != null)
-            {
-                userFromDB.isExistFaceID = false;
-                usersContext.SaveChanges();
-                return true;
-            }
-
-            return false;
-        }
-
         public int GetIDByLogin(string userLogin)
         {
             User? userFromDB = GetUserFromDBByLogin(userLogin);
@@ -68,18 +40,6 @@ namespace AuthFaceIDModernUI.DataBase
             if (userFromDB != null)
             {
                 return userFromDB.Id;
-            }
-
-            throw new Exception("Пользователь не найден");
-        }
-
-        public bool IsExistFaceIDByLogin(string userLogin)
-        {
-            User? userFromDB = GetUserFromDBByLogin(userLogin);
-
-            if (userFromDB != null)
-            {
-                return userFromDB.isExistFaceID;
             }
 
             throw new Exception("Пользователь не найден");
