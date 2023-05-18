@@ -1,52 +1,72 @@
-﻿using Plugin.AudioRecorder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuthFaceIDModernUI.VoiceID.AudioEngine;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace AuthFaceIDModernUI.VoiceID
 {
-    /// <summary>
-    /// Логика взаимодействия для RecordVoice.xaml
-    /// </summary>
-    public partial class RecordVoice : Window
+    public partial class RecordVoice
     {
-        private AudioRecorderService audioRecorder;
+        private MP3Recorder m_MP3Recorder;
+
+        public string m_outFilePath;
 
         public RecordVoice()
         {
             InitializeComponent();
 
-            audioRecorder = new AudioRecorderService();
+            m_MP3Recorder = new MP3Recorder();
+            m_outFilePath = string.Empty;
+
+            StartRecordButton.IsEnabled = true;
+            StopRecordButton.IsEnabled = false;
+            SaveAndCloseButton.IsEnabled = false;
+
+            AudioTextBlock.Text = "Нажмите старт!";
         }
 
-        private async Task StartRecordButton_Click(object sender, RoutedEventArgs e)
+        private void StartRecordButton_Click(object sender, RoutedEventArgs e)
         {
-            await audioRecorder.StartRecording();
+            UpdateFileName();
+            UpdateRecordButtons();
+
+            SaveAndCloseButton.IsEnabled = false;   
+            m_MP3Recorder.OutFileName = m_outFilePath;
+            m_MP3Recorder.StartRecording();
+            AudioTextBlock.Text = "Идёт запись микрофона";
         }
 
-        private async Task StopRecordButton_Click(object sender, RoutedEventArgs e)
+        private void StopRecordButton_Click(object sender, RoutedEventArgs e)
         {
-            await audioRecorder.StopRecording();
+            if (m_MP3Recorder.IsActive())
+            {
+                m_MP3Recorder.StopRecording();
+                AudioTextBlock.Text = "Аудио записано!";
+                UpdateRecordButtons();
+                SaveAndCloseButton.IsEnabled = true;
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            DialogResult = false;
+            Close();
         }
 
         private void SaveAndCloseButton_Click(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
+            Close();
+        }
 
+        private void UpdateFileName()
+        {
+            m_outFilePath = Path.Join(Config.BaseDirectoryPath, $"VoiceID\\AudioFiles\\FromUser\\{DateTime.Now.ToString("dddd_dd_MMMM_yyyy_HH_mm_ss")}.mp3");
+        }
+
+        private void UpdateRecordButtons()
+        {
+            StartRecordButton.IsEnabled = !StartRecordButton.IsEnabled;
+            StopRecordButton.IsEnabled = !StopRecordButton.IsEnabled;
         }
     }
 }
