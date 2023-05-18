@@ -1,7 +1,4 @@
 ﻿using AuthFaceIDModernUI.API;
-using AuthFaceIDModernUI.DataBase;
-using Emgu.CV;
-using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace AuthFaceIDModernUI.VoiceID
