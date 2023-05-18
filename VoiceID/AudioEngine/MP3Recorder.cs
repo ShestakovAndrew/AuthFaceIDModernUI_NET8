@@ -9,7 +9,7 @@ namespace AuthFaceIDModernUI.VoiceID.AudioEngine
         private readonly RecordingState m_recordingState;
         private readonly StoppedState m_stoppedState;
 
-        private AMP3RecorderState m_activeState;
+        private MP3RecorderState m_activeState;
 
         private readonly InternalData m_data;
 

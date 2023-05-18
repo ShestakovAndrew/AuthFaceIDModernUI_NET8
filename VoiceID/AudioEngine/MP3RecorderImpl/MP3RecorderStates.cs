@@ -4,11 +4,11 @@ using NAudio.Wave;
 
 namespace AuthFaceIDModernUI.VoiceID.AudioEngine.MP3RecorderImpl
 {
-    internal abstract class AMP3RecorderState
+    internal abstract class MP3RecorderState
     {
         protected InternalData Data;
 
-        protected AMP3RecorderState(InternalData data)
+        protected MP3RecorderState(InternalData data)
         {
             Data = data;
         }
@@ -28,7 +28,7 @@ namespace AuthFaceIDModernUI.VoiceID.AudioEngine.MP3RecorderImpl
         }
     }
 
-    internal class RecordingState : AMP3RecorderState
+    internal class RecordingState : MP3RecorderState
     {
         public RecordingState(InternalData data)
             : base(data)
@@ -51,7 +51,7 @@ namespace AuthFaceIDModernUI.VoiceID.AudioEngine.MP3RecorderImpl
         }
     }
 
-    internal class StoppedState : AMP3RecorderState
+    internal class StoppedState : MP3RecorderState
     {
         public StoppedState(InternalData data)
             : base(data)
