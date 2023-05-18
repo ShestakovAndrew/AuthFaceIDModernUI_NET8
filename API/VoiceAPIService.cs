@@ -3,12 +3,14 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Media;
 
 namespace AuthFaceIDModernUI.API
 {
     public static class VoiceAPIService
     {
-        public static async Task<STTUserVoiceResponse?> GetTextFromMP3(string fileNamePath)
+        public static async Task<STTUserVoiceResponse?> STT(string fileNamePath)
         {
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, Config.HostASRAPI);
@@ -23,24 +25,28 @@ namespace AuthFaceIDModernUI.API
             return JsonConvert.DeserializeObject<STTUserVoiceResponse>(await response.Content.ReadAsStringAsync());
         }
 
-        public static async Task SpeechText(string textToSpeech, string outFilePath)
+        public static async Task TTS(string textToSpeech)
         {
             if (textToSpeech.Length == 0) return;
+            string outFilePath = $"{Path.Join(Config.BaseDirectoryPath, $"VoiceID\\FromVKCloud\\{BitConverter.ToString(Encoding.Default.GetBytes(textToSpeech.ToLower()))}.mp3")}";
 
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{Config.HostTTSAPI}?encoder=mp3");
-            
-            request.Headers.Add("Authorization", $"Bearer {Config.OAuthTokenSpeechSynthesis}");
-            request.Content = new StringContent(textToSpeech, null, "text/plain");
-            
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            if (!File.Exists(outFilePath))
+            {
+                using var client = new HttpClient();
+                var request = new HttpRequestMessage(HttpMethod.Post, $"{Config.HostTTSAPI}?encoder=mp3");
 
-            using var reader = new Mp3FileReader(await response.Content.ReadAsStreamAsync());
+                request.Headers.Add("Authorization", $"Bearer {Config.OAuthTokenSpeechSynthesis}");
+                request.Content = new StringContent(textToSpeech, null, "text/plain");
 
-            WaveFileWriter.CreateWaveFile(outFilePath, reader);
+                var response = await client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
 
-            System.Media.SoundPlayer player = new() { SoundLocation = outFilePath };
+                using var reader = new Mp3FileReader(await response.Content.ReadAsStreamAsync());
+
+                WaveFileWriter.CreateWaveFile(outFilePath, reader);
+            }
+
+            SoundPlayer player = new() { SoundLocation = outFilePath };
             player.PlaySync();
         }
     }
