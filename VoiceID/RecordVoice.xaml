@@ -81,7 +81,7 @@
                         x:Name="SaveAndCloseButton"
                         Style="{StaticResource MaterialDesignFlatMidBgButton}"
                         materialDesign:ElevationAssist.Elevation="Dp0"
-                        Height="35"
+                        Height="34"
                         Width="212"
                         materialDesign:ButtonAssist.CornerRadius="10"
                         FontSize="18"
