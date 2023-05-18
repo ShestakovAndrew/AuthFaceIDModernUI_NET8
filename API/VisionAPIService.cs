@@ -24,7 +24,7 @@ namespace AuthFaceIDModernUI.API
             };
 
             string responseString = await (await httpClient.PostAsync(
-                $"{Config.HostVisionAPI}{Method.delete}?oauth_token={Config.OAuthToken}&oauth_provider={Config.OAuthProvider}",
+                $"{Config.HostVisionAPI}{Method.delete}?oauth_token={Config.OAuthTokenFaceID}&oauth_provider={Config.OAuthProvider}",
                 multipartContent
             )).Content.ReadAsStringAsync();
 
@@ -45,7 +45,7 @@ namespace AuthFaceIDModernUI.API
                 };
 
             string responseString = await (await httpClient.PostAsync(
-                $"{Config.HostVisionAPI}{Method.recognize}?oauth_token={Config.OAuthToken}&oauth_provider={Config.OAuthProvider}",
+                $"{Config.HostVisionAPI}{Method.recognize}?oauth_token={Config.OAuthTokenFaceID}&oauth_provider={Config.OAuthProvider}",
                 multipartContent
             )).Content.ReadAsStringAsync();
 
@@ -66,7 +66,7 @@ namespace AuthFaceIDModernUI.API
             };
 
             string responseString = await (await httpClient.PostAsync(
-                $"{Config.HostVisionAPI}{Method.set}?oauth_token={Config.OAuthToken}&oauth_provider={Config.OAuthProvider}",
+                $"{Config.HostVisionAPI}{Method.set}?oauth_token={Config.OAuthTokenFaceID}&oauth_provider={Config.OAuthProvider}",
                 multipartContent
             )).Content.ReadAsStringAsync();
 
@@ -83,7 +83,7 @@ namespace AuthFaceIDModernUI.API
             };
 
             string responseString = await (await httpClient.PostAsync(
-                $"{Config.HostVisionAPI}{Method.truncate}?oauth_token={Config.OAuthToken}&oauth_provider={Config.OAuthProvider}",
+                $"{Config.HostVisionAPI}{Method.truncate}?oauth_token={Config.OAuthTokenFaceID}&oauth_provider={Config.OAuthProvider}",
                 multipartContent
             )).Content.ReadAsStringAsync();
 
