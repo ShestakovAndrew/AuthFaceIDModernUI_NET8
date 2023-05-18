@@ -21,6 +21,16 @@ namespace AuthFaceIDModernUI.Windows
             DragMove();
         }
 
+        private void RecordVoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void ListenRecordingButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Login login = new();
