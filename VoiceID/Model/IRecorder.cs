@@ -5,7 +5,7 @@
         string Name { get; set; }
     }
 
-    public enum ERecordingStatus
+    public enum RecordingStatus
     {
         Recording = 0,
         Stopped,

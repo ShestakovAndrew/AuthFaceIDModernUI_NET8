@@ -2,7 +2,7 @@
 {
     public class EventData : EventArgs { }
 
-    public enum EPlayStatus
+    public enum PlayStatus
     {
         Playing = 0,
         Stopped,
