@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:AuthFaceIDModernUI.VoiceID"
         mc:Ignorable="d"
-        Title="RecordVoice" Height="310" Width="420"
+        Title="RecordVoice" Height="260" Width="420"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{x:Null}"
         AllowsTransparency="True"
@@ -31,16 +31,7 @@
                            HorizontalAlignment="Center"
                            FontSize="20"
                            FontWeight="Bold" Height="34" />
-                <ComboBox
-                    Width="256"
-                    x:Name="MicroSelectComboBox"
-                    materialDesign:HintAssist.Hint="Выбрать микрофон"
-                    Style="{StaticResource MaterialDesignOutlinedComboBox}">
-                        <ComboBoxItem Content="Item 1" />
-                        <ComboBoxItem Content="Item 2" />
-                        <ComboBoxItem Content="Item 3" />
-                </ComboBox>
-                
+
                 <StackPanel
                     Orientation="Horizontal"
                     Cursor="Hand"
