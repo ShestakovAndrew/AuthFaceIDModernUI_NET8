@@ -79,7 +79,7 @@ namespace AuthFaceIDModernUI.VoiceID.AudioEngine.MP3RecorderImpl
             Data.WaveIn = new WasapiCapture((Data.ActiveDevice as Microphone).Device);
 
             if (Data.Writer != null) { throw new InvalidOperationException("ERROR: Data.Writer should be null."); }
-            Data.Writer = new LameMP3FileWriter(Data.OutFileName, Data.WaveIn.WaveFormat, 128);
+            Data.Writer = new WaveFileWriter(Data.OutFileName, Data.WaveIn.WaveFormat);
 
             Data.WaveIn.DataAvailable += AvailableDataHandler!;
             Data.WaveIn.RecordingStopped += StopRecordingHandler!;

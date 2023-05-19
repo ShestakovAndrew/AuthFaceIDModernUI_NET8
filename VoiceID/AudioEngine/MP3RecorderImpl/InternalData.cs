@@ -1,6 +1,5 @@
 ﻿using AuthFaceIDModernUI.VoiceID.Model;
 using NAudio.Wave;
-using NAudio.Lame;
 
 namespace AuthFaceIDModernUI.VoiceID.AudioEngine.MP3RecorderImpl
 {
@@ -12,7 +11,7 @@ namespace AuthFaceIDModernUI.VoiceID.AudioEngine.MP3RecorderImpl
 
         public IDevice? ActiveDevice { get; set; } = null;
 
-        public LameMP3FileWriter? Writer { get; set; } = null;
+        public WaveFileWriter? Writer { get; set; } = null;
 
         public IWaveIn? WaveIn { get; set; } = null;
     }

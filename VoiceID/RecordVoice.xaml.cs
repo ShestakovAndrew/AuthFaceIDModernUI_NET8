@@ -58,9 +58,9 @@ namespace AuthFaceIDModernUI.VoiceID
             Close();
         }
 
-        private void UpdateFileName()
+        public void UpdateFileName()
         {
-            m_outFilePath = Path.Join(Config.BaseDirectoryPath, $"VoiceID\\AudioFiles\\FromUser\\{DateTime.Now.ToString("dddd_dd_MMMM_yyyy_HH_mm_ss")}.mp3");
+            m_outFilePath = Path.Join(Config.BaseDirectoryPath, $"VoiceID\\AudioFiles\\FromUser\\{DateTime.Now.ToString("dddd_dd_MMMM_yyyy_HH_mm_ss")}.wav");
         }
 
         private void UpdateRecordButtons()
