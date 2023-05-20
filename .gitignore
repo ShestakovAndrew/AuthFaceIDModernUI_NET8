@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /Migrations
 /users.db
+/VoiceID/AudioFiles/FromUser
+/VoiceID/AudioFiles/FromVKCloud
