@@ -33,7 +33,8 @@ namespace AuthFaceIDModernUI.FaceID
                 if (
                     (response != null) &&
                     (response.status == 200) &&
-                    (response.body.objects![0].status == 0)
+                    (response.body.objects![0].status == 0) &&
+                    (response.body.objects![0].persons[0].tag != "undefined")
                 )
                 {
                     return Int32.Parse(Regex.Match(response.body.objects[0].persons[0].tag, @"\d+").Value);
@@ -61,6 +62,18 @@ namespace AuthFaceIDModernUI.FaceID
             {
                 MessageBox.Show(exception.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
+            }
+        }
+
+        public static async Task ResetSpaceWithFaces()
+        {
+            try
+            {
+                await VisionAPIService.Truncate();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

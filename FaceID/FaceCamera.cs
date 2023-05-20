@@ -10,22 +10,21 @@ namespace AuthFaceIDModernUI.FaceID
         private VideoCapture? m_capture;
         private CascadeClassifier m_faceClassifier;
         private System.Windows.Controls.Image? m_faceViewControl;
-        private Mat m_userFace;
+        private List<Mat> m_userFaces;
 
         public FaceCamera(
-            System.Windows.Controls.Image imageControl
+            System.Windows.Controls.Image? imageControl
         )
         {
             if (imageControl != null) m_faceViewControl = imageControl;
 
             m_faceClassifier = new CascadeClassifier(Config.HaarCascadePath);
-
-            m_userFace = new Mat();
+            m_userFaces = new();
         }
 
-        public Mat GetUserFace()
+        public List<Mat> GetUserFaces()
         {
-            return m_userFace;
+            return m_userFaces;
         }
 
         public void TurnOff()
@@ -76,10 +75,10 @@ namespace AuthFaceIDModernUI.FaceID
                     {
                         Mat faceImage = new(currentFrame, faceOnFrame);
 
-                        m_userFace = faceImage;
+                        if (m_userFaces.Count < 5) m_userFaces.Add(currentFrame);
 
                         CvInvoke.Resize(faceImage, faceImage, new System.Drawing.Size(200, 200));
-                        CvInvoke.Rectangle(currentFrame, faceOnFrame, new Bgr(System.Drawing.Color.DarkGreen).MCvScalar);
+                        CvInvoke.Rectangle(currentFrame, faceOnFrame, new Bgr(Color.DarkGreen).MCvScalar);
                     }
                 }
 
