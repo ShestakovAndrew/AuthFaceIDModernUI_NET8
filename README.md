@@ -12,4 +12,4 @@ Add-Migration InitialCreate
 Update-Database
 ```
 4. Открыть файл Config.cs.
-5. Заменить `your token` на токен, который вы сгенирировали у себя в личном кабинете.
+5. Заменить `your token` на токен, который вы сгенирировали у себя в личном кабинете на VK Cloud.
