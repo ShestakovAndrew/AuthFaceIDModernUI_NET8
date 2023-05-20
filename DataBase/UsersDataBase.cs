@@ -12,25 +12,23 @@ namespace AuthFaceIDModernUI.DataBase
             usersContext = new UsersContext();
         }
 
-        public bool AddFaceByLogin(string userLogin)
+        public bool AddNewUser(string login, string password)
+        {
+            usersContext.Add(new User { Login = login, Password = PasswordHasher.Hash(password), SecretWord = "" });
+            usersContext.SaveChanges();
+            return true;
+        }
+
+        public bool IsUserHasSecretWord(string userLogin)
         {
             User? userToChange = GetUserFromDBByLogin(userLogin);
 
             if (userToChange != null)
             {
-                userToChange.isExistFaceID = true;
-                usersContext.SaveChanges();
-                return true;
+                return userToChange.SecretWord != "";
             }
 
-            return false;
-        }
-
-        public bool AddNewUser(string login, string password)
-        {
-            usersContext.Add(new User { Login = login, Password = PasswordHasher.Hash(password) });
-            usersContext.SaveChanges();
-            return true;
+            throw new Exception("Пользователь не найден");
         }
 
         public bool ChangeUserPassword(string userLogin, string password)
@@ -44,21 +42,7 @@ namespace AuthFaceIDModernUI.DataBase
                 return true;
             }
 
-            return false;
-        }
-
-        public bool DeleteFaceByLogin(string userLogin)
-        {
-            User? userFromDB = GetUserFromDBByLogin(userLogin);
-
-            if (userFromDB != null)
-            {
-                userFromDB.isExistFaceID = false;
-                usersContext.SaveChanges();
-                return true;
-            }
-
-            return false;
+            throw new Exception("Пользователь не найден");
         }
 
         public int GetIDByLogin(string userLogin)
@@ -73,13 +57,39 @@ namespace AuthFaceIDModernUI.DataBase
             throw new Exception("Пользователь не найден");
         }
 
-        public bool IsExistFaceIDByLogin(string userLogin)
+        public string GetLoginByID(int userID)
         {
-            User? userFromDB = GetUserFromDBByLogin(userLogin);
+            User? userFromDB = GetUserFromDBByID(userID);
 
             if (userFromDB != null)
             {
-                return userFromDB.isExistFaceID;
+                return userFromDB.Login;
+            }
+
+            throw new Exception("Пользователь не найден");
+        }
+
+        public string GetSecretWordByID(int userID)
+        {
+            User? userFromDB = GetUserFromDBByID(userID);
+
+            if (userFromDB != null)
+            {
+                return userFromDB.SecretWord!;
+            }
+
+            throw new Exception("Пользователь не найден");
+        }
+
+        public void DeleteUserByID(int userID)
+        {
+            User? userFromDB = GetUserFromDBByID(userID);
+
+            if (userFromDB != null)
+            {
+                usersContext.Users!.Remove(userFromDB);
+                usersContext.SaveChanges();
+                return;
             }
 
             throw new Exception("Пользователь не найден");
@@ -99,12 +109,31 @@ namespace AuthFaceIDModernUI.DataBase
                 return PasswordHasher.Verify(userFromDB.Password, password);
             }
 
-            return false;
+            throw new Exception("Пользователь не найден");
+        }
+
+        public void AddSecretWordForUser(string userLogin, string secretWord)
+        {
+            User? userFromDB = GetUserFromDBByLogin(userLogin);
+
+            if (userFromDB != null)
+            {
+                userFromDB.SecretWord = secretWord;
+                usersContext.SaveChanges();
+                return;
+            }
+
+            throw new Exception("Пользователь не найден");
         }
 
         private User? GetUserFromDBByLogin(string userLogin)
         {
             return usersContext.Users!.Where(u => u.Login == userLogin).FirstOrDefault();
+        }
+
+        private User? GetUserFromDBByID(int userID)
+        {
+            return usersContext.Users!.Where(u => u.Id == userID).FirstOrDefault();
         }
     }
 }

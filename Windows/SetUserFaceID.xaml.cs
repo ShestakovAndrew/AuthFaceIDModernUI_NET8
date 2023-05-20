@@ -31,7 +31,7 @@ namespace AuthFaceIDModernUI.Windows
             if (DoFotoButton.Content.ToString() == "Сделать фото")
             {
                 m_faceCamera.TurnOff();
-                faceToCheck = m_faceCamera.GetUserFace();
+                faceToCheck = m_faceCamera.GetUserFaces()[0];
 
                 CameraImages.Source = BitmapSourceExtension.ToBitmapSource(faceToCheck);
 

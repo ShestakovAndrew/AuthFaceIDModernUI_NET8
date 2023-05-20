@@ -1,6 +1,9 @@
 ﻿using AuthFaceIDModernUI.DataBase;
 using AuthFaceIDModernUI.FaceID;
+using AuthFaceIDModernUI.VoiceID;
 using AuthFaceIDModernUI.Windows;
+using Emgu.CV;
+using NAudio.Wave;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,9 +13,13 @@ namespace ModernLoginWindow
 {
     public partial class Login : Window
     {
+        private string m_voiceFilePath;
+
         public Login()
         {
             InitializeComponent();
+
+            m_voiceFilePath = string.Empty;
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -31,6 +38,7 @@ namespace ModernLoginWindow
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             UsersDataBase db = new();
+
             if (!db.IsLoginExistInDB(LoginTextBox.Text))
             {
                 LoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
@@ -48,40 +56,55 @@ namespace ModernLoginWindow
 
         private async void FaceIDButton_Click(object sender, RoutedEventArgs e)
         {
+            FaceCamera faceCamera = new(null);
+
+            faceCamera.TurnOn();
+            Thread.Sleep(3000);
+            faceCamera.TurnOff();
+
             UsersDataBase db = new();
 
-            if (LoginTextBox.Text.Length == 0 || !db.IsLoginExistInDB(LoginTextBox.Text))
+            foreach (Mat frameWithFaces in faceCamera.GetUserFaces())
             {
-                LoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
-                return;
-            }
+                int id = await FaceIDTool.RecornizeIDOnImage(frameWithFaces);
 
-            if (!db.IsExistFaceIDByLogin(LoginTextBox.Text))
-            {
-                FaceIDButton.BorderBrush = new SolidColorBrush(Colors.Red);
-                System.Windows.MessageBox.Show("Для данного пользователя не настроен FaceID.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-            else
-            {
-                SetUserFaceID setUserFaceID = new();
-
-                if (setUserFaceID.ShowDialog() == true)
+                if (id != -1)
                 {
-                    if (await FaceIDTool.RecornizeIDOnImage(setUserFaceID.faceToCheck!) == db.GetIDByLogin(LoginTextBox.Text))
+                    if (await CheckSecretWord(id))
                     {
-                        LoginToPersonalArea(LoginTextBox.Text);
+                        await VoiceTool.TextToSpeech("Авторизация прошла успешно");
+                        LoginToPersonalArea(db.GetLoginByID(id));
+                        return;
                     }
                     else
                     {
-                        System.Windows.MessageBox.Show("Ошибка распознования. Повторите попытку.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        await VoiceTool.TextToSpeech("Секретное слово не верно, повторите попытку");
                     }
                 }
-                else
-                {
-                    System.Windows.MessageBox.Show("Лицо для распознания не выбрано.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
             }
+
+            await VoiceTool.TextToSpeech("Пользователь не распознан в системе");
+        }
+
+        private async Task<bool> CheckSecretWord(int userID)
+        {
+            await VoiceTool.TextToSpeech("Для завершения авторизации подтвердите секретное слово");
+
+            RecordVoice recordVoice = new();
+
+            if (recordVoice.ShowDialog() == true)
+            {
+                m_voiceFilePath = recordVoice.m_outFilePath;
+                m_voiceFilePath = VoiceTool.ConvertStereoToMonoWav(recordVoice, m_voiceFilePath);
+
+                string textFromUser = await VoiceTool.SpeechToText(m_voiceFilePath);
+                
+                UsersDataBase db = new();
+
+                return textFromUser == db.GetSecretWordByID(userID);
+            }
+
+            return false;
         }
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
@@ -93,7 +116,7 @@ namespace ModernLoginWindow
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Application.Current.Shutdown();
+            Application.Current.Shutdown();
         }
 
         private void LoginTextBox_TextChanged(object sender, TextChangedEventArgs e)
