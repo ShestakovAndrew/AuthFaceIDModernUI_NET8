@@ -1,11 +1,8 @@
 ﻿using AuthFaceIDModernUI.DataBase;
 using AuthFaceIDModernUI.FaceID;
 using AuthFaceIDModernUI.VoiceID;
-using AuthFaceIDModernUI.VoiceID.Audio;
 using Emgu.CV;
 using ModernLoginWindow;
-using NAudio.Wave;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -100,8 +97,6 @@ namespace AuthFaceIDModernUI.Windows
 
         private async void AddFaceAndVoiceOnAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            await FaceIDTool.ResetSpaceWithFaces();
-
             if (NewLoginTextBox.Text.Length == 0)
             {
                 NewLoginTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
@@ -150,8 +145,7 @@ namespace AuthFaceIDModernUI.Windows
                 }
             }
 
-            if (
-                db.AddNewUser(NewLoginTextBox.Text, NewPasswordBox.Password) &&
+            if (db.AddNewUser(NewLoginTextBox.Text, NewPasswordBox.Password) &&
                 await FaceIDTool.SetPersonID(faceCamera.GetUserFaces()[0], db.GetIDByLogin(NewLoginTextBox.Text))
             )
             {

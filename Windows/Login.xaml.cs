@@ -35,7 +35,7 @@ namespace ModernLoginWindow
             Close();
         }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             UsersDataBase db = new();
 
@@ -49,6 +49,17 @@ namespace ModernLoginWindow
             {
                 PasswordBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 return;
+            }
+
+            if (await CheckSecretWord(db.GetIDByLogin(LoginTextBox.Text)))
+            {
+                await VoiceTool.TextToSpeech("Авторизация прошла успешно");
+                LoginToPersonalArea(db.GetLoginByID(db.GetIDByLogin(LoginTextBox.Text)));
+                return;
+            }
+            else
+            {
+                await VoiceTool.TextToSpeech("Секретное слово не верно, повторите попытку");
             }
 
             LoginToPersonalArea(LoginTextBox.Text);
