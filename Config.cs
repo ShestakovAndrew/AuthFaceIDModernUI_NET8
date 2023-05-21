@@ -17,8 +17,8 @@
         public static string OAuthProvider = "mcs";
 
         //set your tokens from VK Cloud
-        public static string OAuthTokenFaceID = "LGeEtP6piyaeBVDe1EdJGpzSGJ24XPGP52t4FmrHLuk3Sogtx";
-        public static string OAuthTokenSpeechSynthesis = "2QaHcfs7WTbWsGuZxm7jJaCzMLNzRnrxTsUgVLeHHpZKrn6xoR";
-        public static string OAuthTokenAudioFileRecognition = "CCiPVUB3Rp2c7v2ow2aszosNF1pcaUh86ThieQjaz55rH9pwC";
+        public static string OAuthTokenFaceID = "токен распознания лиц";
+        public static string OAuthTokenSpeechSynthesis = "токен для синтеза речи";
+        public static string OAuthTokenAudioFileRecognition = "токен для распознавания аудиофайлов";
     }
 }
